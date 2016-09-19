@@ -1,4 +1,4 @@
-.PHONY: demo demo-build demo-run
+.PHONY: demo demo-build demo-run tests
 
 demo:
 	composer install
@@ -11,3 +11,6 @@ demo-build:
 
 demo-run:
 	docker run --rm -p 8080:80 --name tracy-profiler-demo tracy-profiler-demo
+
+tests:
+	sudo docker run -v $$(pwd):/app --rm php:5.4-cli bash -c 'cd /app && php ./vendor/bin/phpunit'

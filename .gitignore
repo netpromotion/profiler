@@ -1,3 +1,4 @@
 /.idea/
 /vendor/
+/tests/phpunit.log
 /composer.lock
