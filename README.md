@@ -1,4 +1,4 @@
-# [Profiler] adapter for [Tracy]
+# [Profiler] with adapter for [Tracy]
 
 
 

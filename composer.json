@@ -1,6 +1,6 @@
 {
-    "name": "netpromotion/tracy-profiler-adapter",
-    "description": "Profiler adapter for Tracy",
+    "name": "netpromotion/tracy-profiler",
+    "description": "Profiler with adapter for Tracy",
     "license": "MIT",
     "authors": [
         {
