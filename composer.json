@@ -9,5 +9,6 @@
         }
     ],
     "require": {
+        "petrknap/php-profiler": "^1.0"
     }
 }
