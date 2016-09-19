@@ -13,13 +13,28 @@ class TracyBarAdapter implements IBarPanel
      */
     private $profiles = array();
 
-    public function __construct()
+    private function __construct()
     {
         $me = $this;
         Profiler::setPostProcessor(function (Profile $profile) use ($me) {
             $me->profiles[] = $profile;
             return $profile;
         }, __CLASS__);
+    }
+
+    public static function create()
+    {
+        static $instance;
+        if (!$instance) {
+            $instance = new self();
+        }
+        return $instance;
+    }
+
+    public static function enable()
+    {
+        self::create();
+        Profiler::enable();
     }
 
     /**
