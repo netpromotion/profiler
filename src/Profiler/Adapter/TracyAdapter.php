@@ -19,7 +19,7 @@ class TracyAdapter implements IBarPanel
         Profiler::setPostProcessor(function (Profile $profile) use ($me) {
             $me->profiles[] = $profile;
             return $profile;
-        });
+        }, __CLASS__);
     }
 
     /**
