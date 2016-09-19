@@ -1,0 +1,13 @@
+{
+    "name": "netpromotion/tracy-profiler-adapter",
+    "description": "Profiler adapter for Tracy",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Petr Knap",
+            "email": "knap@netpromotion.cz"
+        }
+    ],
+    "require": {
+    }
+}
