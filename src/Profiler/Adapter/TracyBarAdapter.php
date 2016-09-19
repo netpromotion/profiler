@@ -6,7 +6,7 @@ use Netpromotion\Profiler\Profiler;
 use PetrKnap\Php\Profiler\Profile;
 use Tracy\IBarPanel;
 
-class TracyAdapter implements IBarPanel
+class TracyBarAdapter implements IBarPanel
 {
     /**
      * @var Profile[]
