@@ -14,7 +14,7 @@
         }
     },
     "require": {
-        "php": ">=5.4"
+        "php": ">=5.4",
         "petrknap/php-profiler": "^1.1",
         "tracy/tracy": "^2.4"
     },
