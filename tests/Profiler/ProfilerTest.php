@@ -7,6 +7,9 @@ use PetrKnap\Php\Profiler\Profile;
 
 class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @runInSeparateProcess
+     */
     public function testMultipleHooksWorks()
     {
         $order = [];
