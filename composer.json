@@ -19,12 +19,14 @@
     },
     "require-dev": {
         "nette/bootstrap": "^2.3",
-        "nette/application": "^2.3"
+        "nette/application": "^2.3",
+        "latte/latte": "^2.3"
     },
 
     "autoload": {
         "psr-4": {
-            "Netpromotion\\Profiler\\": "src/Profiler"
+            "Netpromotion\\Profiler\\": "src/Profiler",
+            "Netpromotion\\Profiler\\Demo\\": "demo/src"
         }
     }
 }
