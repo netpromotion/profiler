@@ -5,8 +5,8 @@ demo:
 	sudo make demo-build demo-run
 
 demo-build:
-	chmod 0777 demo/log -R
-	chmod 0777 demo/temp -R
+	chmod 0777 demo/nette/log -R
+	chmod 0777 demo/nette/temp -R
 	docker build -t tracy-profiler-demo .
 
 demo-run:

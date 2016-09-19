@@ -4,7 +4,7 @@ extensions:
 application:
     scanDirs: false
     mapping:
-        *: Netpromotion\Profiler\Demo\*Module\Presenter\*Presenter
+        *: Netpromotion\Profiler\Demo\Nette\*Module\Presenter\*Presenter
 
 services:
     router: Nette\Application\Routers\SimpleRouter('Homepage:default')

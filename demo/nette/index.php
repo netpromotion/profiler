@@ -4,7 +4,7 @@ use Netpromotion\Profiler\Adapter\TracyBarAdapter;
 use Netpromotion\Profiler\Profiler;
 use Nette\Configurator;
 
-require __DIR__ . "/../vendor/autoload.php";
+require __DIR__ . "/../../vendor/autoload.php";
 
 TracyBarAdapter::enable(); // this line is required only if you need to profile before container is created
 
