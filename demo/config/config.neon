@@ -1,0 +1,6 @@
+tracy:
+    bar:
+        - Netpromotion\TracyProfiler\TracyProfiler
+
+application:
+    scanDirs: false
