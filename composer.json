@@ -18,6 +18,7 @@
         "tracy/tracy": "^2.4"
     },
     "require-dev": {
-        "nette/bootstrap": "^2.3"
+        "nette/bootstrap": "^2.3",
+        "nette/application": "^2.3"
     }
 }
