@@ -1,25 +1,43 @@
 <?php
 
-namespace Netorg\Common\Debug;
+namespace Netpromotion\Profiler\Adapter;
 
-use PetrKnap\Php\Profiler\AdvancedProfiler;
+use Netpromotion\Profiler\Profiler;
 use PetrKnap\Php\Profiler\Profile;
 use Tracy\IBarPanel;
 
-class TracyProfiler extends AdvancedProfiler implements IBarPanel
+class TracyBarAdapter implements IBarPanel
 {
     /**
      * @var Profile[]
      */
     private $profiles = array();
 
-    public function __construct()
+    private function __construct()
     {
         $me = $this;
-        self::setPostProcessor(function (Profile $profile) use ($me) {
+        Profiler::setPostProcessor(function (Profile $profile) use ($me) {
             $me->profiles[] = $profile;
             return $profile;
-        });
+        }, __CLASS__);
+    }
+
+    /**
+     * @return self
+     */
+    public static function create()
+    {
+        static $instance;
+        if (!$instance) {
+            $instance = new self();
+        }
+        return $instance;
+    }
+
+    public static function enable()
+    {
+        self::create();
+        Profiler::enable();
     }
 
     /**
@@ -31,7 +49,7 @@ class TracyProfiler extends AdvancedProfiler implements IBarPanel
         return sprintf(
             "<span title='%s'>⏱ %s</span>",
             "Profiler info",
-            self::$enabled ? sprintf(
+            Profiler::isEnabled() ? sprintf(
                 $countOfProfiles == 1 ? "%d profile" : "%d profiles",
                 $countOfProfiles
             ) : "disabled"
@@ -48,8 +66,8 @@ class TracyProfiler extends AdvancedProfiler implements IBarPanel
         foreach ($this->profiles as $profile) {
             $table .= sprintf(
                 "<tr><td>%s</td><td>%s</td><td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
-                $profile->meta[self::START_LABEL],
-                $profile->meta[self::FINISH_LABEL],
+                $profile->meta[Profiler::START_LABEL],
+                $profile->meta[Profiler::FINISH_LABEL],
                 $profile->duration * 1000,
                 $profile->absoluteDuration * 1000,
                 $profile->memoryUsageChange / 1024,
@@ -59,7 +77,7 @@ class TracyProfiler extends AdvancedProfiler implements IBarPanel
         $table .= "</table>";
         return sprintf(
             "<h1>Profiler info</h1><div class='tracy-inner'>%s</div>",
-            self::$enabled ? $table : "Profiling is disabled."
+            Profiler::isEnabled() ? $table : "Profiling is disabled."
         );
     }
 }

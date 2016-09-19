@@ -1,2 +1,10 @@
+extensions:
+    profiler: Netpromotion\Profiler\Extension\ProfilerNetteExtension
+
 application:
     scanDirs: false
+    mapping:
+        *: Netpromotion\Profiler\Demo\*Module\Presenter\*Presenter
+
+services:
+    router: Nette\Application\Routers\SimpleRouter('Homepage:default')
