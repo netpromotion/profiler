@@ -1,6 +1,6 @@
 tracy:
     bar:
-        - Netpromotion\TracyProfiler\TracyProfiler
+        - Netpromotion\Profiler\Adapter\TracyBarAdapter::create()
 
 application:
     scanDirs: false

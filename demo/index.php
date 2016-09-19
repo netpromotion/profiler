@@ -1,12 +1,36 @@
 <?php
 
+use Netpromotion\Profiler\Adapter\TracyBarAdapter;
+use Netpromotion\Profiler\Profiler;
+use Nette\Configurator;
+
 require __DIR__ . "/../vendor/autoload.php";
 
-$configurator = new Nette\Configurator();
+TracyBarAdapter::enable();
 
-$configurator->setDebugMode(TRUE);
-$configurator->enableDebugger(__DIR__ . "/log");
-$configurator->setTempDirectory(__DIR__ . "/temp");
+Profiler::start();
+{
+    $configurator = new Configurator();
 
-$configurator->addConfig(__DIR__ . "/config/config.neon");
-$configurator->createContainer()->getService("application")->run();
+    Profiler::start();
+    {
+        $configurator->setDebugMode(TRUE);
+        $configurator->enableDebugger(__DIR__ . "/log");
+        $configurator->setTempDirectory(__DIR__ . "/temp");
+    }
+    Profiler::finish();
+
+    Profiler::start();
+    {
+        $configurator->addConfig(__DIR__ . "/config/config.neon");
+        $container = $configurator->createContainer();
+    }
+    Profiler::finish();
+
+    Profiler::start();
+    {
+        $container->getService("application")->run();
+    }
+    Profiler::finish();
+}
+Profiler::finish();
