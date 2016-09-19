@@ -8,6 +8,11 @@
             "email": "knap@netpromotion.cz"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "5.4.45"
+        }
+    },
     "require": {
         "petrknap/php-profiler": "^1.0",
         "tracy/tracy": "^2.4"
