@@ -1,5 +1,5 @@
 {
-    "name": "netpromotion/tracy-profiler",
+    "name": "netpromotion/profiler",
     "description": "Profiler with adapter for Tracy",
     "license": "MIT",
     "authors": [
@@ -24,7 +24,7 @@
 
     "autoload": {
         "psr-4": {
-            "Netpromotion\\TracyProfiler\\": "src/TracyProfiler"
+            "Netpromotion\\Profiler\\": "src/Profiler"
         }
     }
 }
