@@ -22,6 +22,9 @@ class TracyBarAdapter implements IBarPanel
         }, __CLASS__);
     }
 
+    /**
+     * @return self
+     */
     public static function create()
     {
         static $instance;
