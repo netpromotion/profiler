@@ -20,5 +20,11 @@
     "require-dev": {
         "nette/bootstrap": "^2.3",
         "nette/application": "^2.3"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Netpromotion\\TracyProfiler\\": "src/TracyProfiler"
+        }
     }
 }

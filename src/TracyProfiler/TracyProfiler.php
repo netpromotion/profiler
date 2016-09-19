@@ -1,6 +1,6 @@
 <?php
 
-namespace Netorg\Common\Debug;
+namespace Netpromotion\TracyProfiler;
 
 use PetrKnap\Php\Profiler\AdvancedProfiler;
 use PetrKnap\Php\Profiler\Profile;
