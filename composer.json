@@ -1,6 +1,6 @@
 {
-    "name": "netpromotion/tracy-profiler-adapter",
-    "description": "Profiler adapter for Tracy",
+    "name": "netpromotion/profiler",
+    "description": "Profiler with adapter for Tracy",
     "license": "MIT",
     "authors": [
         {
@@ -8,6 +8,26 @@
             "email": "knap@netpromotion.cz"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "5.4.45"
+        }
+    },
     "require": {
+        "php": ">=5.4"
+        "petrknap/php-profiler": "^1.1",
+        "tracy/tracy": "^2.4"
+    },
+    "require-dev": {
+        "nette/bootstrap": "^2.3",
+        "nette/application": "^2.3",
+        "latte/latte": "^2.3"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Netpromotion\\Profiler\\": "src/Profiler",
+            "Netpromotion\\Profiler\\Demo\\": "demo/src"
+        }
     }
 }
