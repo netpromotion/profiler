@@ -34,12 +34,6 @@ class TracyBarAdapter implements IBarPanel
         return $instance;
     }
 
-    public static function enable()
-    {
-        self::create();
-        Profiler::enable();
-    }
-
     /**
      * @inheritdoc
      */
