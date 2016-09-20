@@ -3,3 +3,4 @@
 /dockerfile export-ignore
 /makefile export-ignore
 /phpunit.xml export-ignore
+/VERSIONING.md export-ignore
