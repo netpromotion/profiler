@@ -16,6 +16,11 @@ Profiler::finish();
 If you wish to known more about [Profiler], please visit [Profiler's README.md].
 
 
+## How to install
+
+Run `composer require netpromotion/profiler` in your project directory.
+
+
 ### [Nette]
 
 Add extension `Netpromotion\Profiler\Extension\ProfilerNetteExtension` into your configuration. 
@@ -32,24 +37,8 @@ If you wish to profile before container is ready, call `ProfilerNetteExtension::
 There is available live demo - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
 
 
-## How to install
-
-Run `composer require netpromotion/profiler` or merge this JSON code with your project `composer.json` file manually and run `composer install`. Instead of `dev-master` you can use [one of released versions].
-
-```json
-{
-    "require": {
-        "netpromotion/profiler": "dev-master"
-    }
-}
-```
-
-Or manually clone this repository via `git clone https://github.com/netpromotion/profiler.git` or download [this repository as ZIP] and extract files into your project.
-
 
 [Profiler]:https://packagist.org/packages/petrknap/php-profiler
 [Tracy]:https://tracy.nette.org/
 [Profiler's README.md]:https://github.com/petrknap/php-profiler/blob/master/README.md
 [Nette]:https://nette.org/
-[one of released versions]:https://github.com/netpromotion/profiler/releases
-[this repository as ZIP]:https://github.com/netpromotion/profiler/archive/master.zip
