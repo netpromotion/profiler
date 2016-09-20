@@ -34,12 +34,6 @@ class TracyBarAdapter implements IBarPanel
         return $instance;
     }
 
-    public static function enable()
-    {
-        self::create();
-        Profiler::enable();
-    }
-
     /**
      * @inheritdoc
      */
@@ -76,7 +70,7 @@ class TracyBarAdapter implements IBarPanel
         }
         $table .= "</table>";
         return sprintf(
-            "<h1>Profiler info</h1><div class='tracy-inner'>%s</div>",
+            "<h1>Profiler info</h1><div class='nette-inner'>%s</div>",
             Profiler::isEnabled() ? $table : "Profiling is disabled."
         );
     }
