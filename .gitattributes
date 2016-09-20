@@ -1,6 +1,6 @@
-/demo   export-ignore
-/tests  export-ignore
-/dockerfile export-ignore
-/makefile export-ignore
-/phpunit.xml export-ignore
+/demo          export-ignore
+/tests         export-ignore
+/dockerfile    export-ignore
+/makefile      export-ignore
+/phpunit.xml   export-ignore
 /VERSIONING.md export-ignore

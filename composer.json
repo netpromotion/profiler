@@ -1,35 +1,34 @@
 {
-    "name": "netpromotion/profiler",
-    "description": "Profiler with adapter for Tracy",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Petr Knap",
-            "email": "knap@netpromotion.cz"
-        }
-    ],
-    "config": {
-        "platform": {
-            "php": "5.4.45",
-            "ext-dom": true
-        }
-    },
-    "require": {
-        "php": ">=5.4",
-        "petrknap/php-profiler": "^1.1",
-        "tracy/tracy": "^2.4"
-    },
-    "require-dev": {
-        "nette/bootstrap": "^2.3",
-        "nette/application": "^2.3",
-        "latte/latte": "^2.3",
-        "phpunit/phpunit": "^4.8"
-    },
-
-    "autoload": {
-        "psr-4": {
-            "Netpromotion\\Profiler\\": "src/Profiler",
-            "Netpromotion\\Profiler\\Demo\\Nette\\": "demo/nette/src"
-        }
+  "name": "netpromotion/profiler",
+  "description": "Profiler with adapter for Tracy",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Petr Knap",
+      "email": "knap@netpromotion.cz"
     }
+  ],
+  "config": {
+    "platform": {
+      "php": "5.4.45",
+      "ext-dom": true
+    }
+  },
+  "require": {
+    "php": ">=5.4",
+    "petrknap/php-profiler": "^1.1",
+    "tracy/tracy": "^2.4"
+  },
+  "require-dev": {
+    "nette/bootstrap": "^2.3",
+    "nette/application": "^2.3",
+    "latte/latte": "^2.3",
+    "phpunit/phpunit": "^4.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Netpromotion\\Profiler\\": "src/Profiler",
+      "Netpromotion\\Profiler\\Demo\\Nette\\": "demo/nette/src"
+    }
+  }
 }
