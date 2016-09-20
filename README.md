@@ -27,6 +27,8 @@ extensions:
 
 If you wish to profile before container is ready, call `ProfilerNetteExtension::enable` manually.
 
+![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/nette.png)
+
 There is available live demo - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
 
 
