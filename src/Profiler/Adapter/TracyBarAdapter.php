@@ -68,7 +68,7 @@ class TracyBarAdapter implements IBarPanel
         }
         $time = $tN - $t0;
 
-        $table = "<style>.nette-addons-profiler-hidden{display:none}.nette-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
+        $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         foreach ($this->profiles as $profile) {
@@ -100,11 +100,11 @@ class TracyBarAdapter implements IBarPanel
             $after = 100 - $before - $activeTime - $inactiveTime;
 
             $table .= sprintf(
-                "<tr class='nette-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
-                "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
-                "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
-                "<span class='nette-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
-                "<span class='nette-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
+                "<tr class='tracy-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
+                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
+                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
+                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
+                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
                 "</td></tr>",
                 $before,
                 $activeTime,
@@ -114,7 +114,7 @@ class TracyBarAdapter implements IBarPanel
         }
         $table .= "</table>";
         return sprintf(
-            "<h1>Profiler info</h1><div class='nette-inner'>%s</div>",
+            "<h1>Profiler info</h1><div class='tracy-inner'>%s</div>",
             Profiler::isEnabled() ? $table : "Profiling is disabled."
         );
     }
