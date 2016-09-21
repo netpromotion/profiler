@@ -58,10 +58,22 @@ class TracyBarAdapter implements IBarPanel
         $table = "<table>";
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         foreach ($this->profiles as $profile) {
+            if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
+                $labels = sprintf(
+                    "<td colspan='2'>%s</td>",
+                    $profile->meta[Profiler::START_LABEL],
+                    $profile->meta[Profiler::FINISH_LABEL]
+                );
+            } else {
+                $labels = sprintf(
+                    "<td>%s</td><td>%s</td>",
+                    $profile->meta[Profiler::START_LABEL],
+                    $profile->meta[Profiler::FINISH_LABEL]
+                );
+            }
             $table .= sprintf(
-                "<tr><td>%s</td><td>%s</td><td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
-                $profile->meta[Profiler::START_LABEL],
-                $profile->meta[Profiler::FINISH_LABEL],
+                "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
+                $labels,
                 $profile->duration * 1000,
                 $profile->absoluteDuration * 1000,
                 $profile->memoryUsageChange / 1024,
