@@ -13,8 +13,7 @@ class ProfilerNetteExtension extends CompilerExtension
 
     public function loadConfiguration()
     {
-        if (!class_exists("Tracy\\Debugger") || Debugger::$productionMode === TRUE)
-        {
+        if (!class_exists("Tracy\\Debugger") || Debugger::$productionMode === TRUE) {
             return;
         }
 

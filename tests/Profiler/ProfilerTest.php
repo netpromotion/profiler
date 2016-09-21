@@ -13,22 +13,22 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function testMultipleHooksWorks()
     {
         $order = [];
-        Profiler::setPostProcessor(function(Profile $profile) use (&$order) {
+        Profiler::setPostProcessor(function (Profile $profile) use (&$order) {
             $order[] = 1;
             return $profile;
         });
 
-        Profiler::setPostProcessor(function(Profile $profile) use (&$order) {
+        Profiler::setPostProcessor(function (Profile $profile) use (&$order) {
             $order[] = 2;
             return $profile;
         });
 
-        Profiler::setPostProcessor(function(Profile $profile) use (&$order) {
+        Profiler::setPostProcessor(function (Profile $profile) use (&$order) {
             $order[] = 3;
             return $profile;
         }, "B");
 
-        Profiler::setPostProcessor(function(Profile $profile) use (&$order) {
+        Profiler::setPostProcessor(function (Profile $profile) use (&$order) {
             $order[] = 4;
             return $profile;
         }, "A");

@@ -7,16 +7,34 @@ use PetrKnap\Php\Profiler\Profile;
 
 class Profiler extends AdvancedProfiler
 {
-    private static $postProcessors;
+    /**
+     * @var bool
+     */
+    protected static $enabled = false;
+
+    /**
+     * @var Profile[]
+     */
+    protected static $stack = [];
+
+    /**
+     * @var callable
+     */
+    protected static $postProcessor = null;
+
+    /**
+     * @var callable[]
+     */
+    protected static $postProcessors;
 
     /**
      * @inheritdoc
      */
     public static function setPostProcessor(callable $postProcessor, $postProcessorId = "default")
     {
-        self::$postProcessors[$postProcessorId] = $postProcessor;
+        static::$postProcessors[$postProcessorId] = $postProcessor;
 
-        $postProcessors = self::$postProcessors;
+        $postProcessors = static::$postProcessors;
         parent::setPostProcessor(function (Profile $profile) use ($postProcessors) {
             foreach ($postProcessors as $key => $postProcessor) {
                 if ($key !== "default") {
