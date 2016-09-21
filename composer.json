@@ -27,7 +27,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Netpromotion\\Profiler\\": "src/Profiler",
+      "Netpromotion\\Profiler\\": "src/Profiler"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Netpromotion\\Profiler\\Test\\": "tests",
       "Netpromotion\\Profiler\\Demo\\Nette\\": "demo/nette/src"
     }
   }
