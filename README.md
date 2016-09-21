@@ -38,22 +38,19 @@ Profiler::start(/* sprintf( */ "line %s", __LINE__ /* ) */);
 Profiler::finish(/* sprintf( */ "line %s", __LINE__ /* ) */);
 
 // If you wish to create more detailed profiles, start new profile inside another one
-Profiler::start("Profile 1 begin");
+Profiler::start("Profile 1");
     /* your code goes here */
-    Profiler::start("Profile 1.1 begin");
-        Profiler::start("Profile 1.1.1 begin");
+    Profiler::start("Profile 1.1");
+        Profiler::start("Profile 1.1.1");
             /* your code goes here */
-        Profiler::finish("Profile 1.1.1 end");
+        Profiler::finish("Profile 1.1.1");
         /* your code goes here */
-        Profiler::start("Profile 1.1.2 begin");
+        Profiler::start("Profile 1.1.2");
             /* your code goes here */
-        Profiler::finish("Profile 1.1.2 end");
+        Profiler::finish("Profile 1.1.2");
         /* your code goes here */
-    Profiler::finish("Profile 1.1 end");
-Profiler::finish("Profile 1 end");
-Profiler::start("Profile 2 begin");
-    /* your code goes here */
-Profiler::finish("Profile 2 end");
+    Profiler::finish("Profile 1.1");
+Profiler::finish("Profile 1");
 ```
 
 If you wish to know more about [Profiler], please visit [Profiler's README.md].
