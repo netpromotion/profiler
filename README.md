@@ -8,9 +8,52 @@ This repository contains lightweight, very quick and easy to use [Profiler] with
 If you wish to profile a block of code, simply encapsulate it between `Profiler::start` and `Profiler::finish` calls.
 
 ```php
+<?php // index.php
+
+if (/* Is debug mode enabled? */) {
+    Profiler::enable();
+}
+
 Profiler::start();
-// code to profile
+require(__DIR__ . "/required_file.php");
 Profiler::finish();
+```
+
+```php
+<?php // required_file.php
+
+// If you wish to use default labels, call functions without parameters
+Profiler::start(/* sprintf("%s#%s", __FILE__, __LINE__) */);
+/* your code goes here */
+Profiler::finish(/* sprintf("%s#%s", __FILE__, __LINE__) */);
+
+// If you wish to use static labels, place label as first parameter
+Profiler::start("static label");
+/* your code goes here */
+Profiler::finish("static label");
+
+// If you wish to use dynamic labels, call functions like sprintf
+Profiler::start(/* sprintf( */ "line %s", __LINE__ /* ) */);
+/* your code goes here */
+Profiler::finish(/* sprintf( */ "line %s", __LINE__ /* ) */);
+
+// If you wish to create more detailed profiles, start new profile inside another one
+Profiler::start("Profile 1 begin");
+    /* your code goes here */
+    Profiler::start("Profile 1.1 begin");
+        Profiler::start("Profile 1.1.1 begin");
+            /* your code goes here */
+        Profiler::finish("Profile 1.1.1 end");
+        /* your code goes here */
+        Profiler::start("Profile 1.1.2 begin");
+            /* your code goes here */
+        Profiler::finish("Profile 1.1.2 end");
+        /* your code goes here */
+    Profiler::finish("Profile 1.1 end");
+Profiler::finish("Profile 1 end");
+Profiler::start("Profile 2 begin");
+    /* your code goes here */
+Profiler::finish("Profile 2 end");
 ```
 
 If you wish to know more about [Profiler], please visit [Profiler's README.md].
@@ -23,7 +66,7 @@ Run `composer require netpromotion/profiler` in your project directory.
 
 ### [Nette]
 
-Add extension `Netpromotion\Profiler\Extension\ProfilerNetteExtension` into your configuration. 
+Add extension `Netpromotion\Profiler\Extension\ProfilerNetteExtension` into your configuration, it is not necessary to call `Profiler::enable`.
 
 ```neon
 extensions:
