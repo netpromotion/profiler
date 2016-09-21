@@ -10,7 +10,7 @@ if (DEBUG_MODE === true) {
     ProfilerNetteExtension::enable(); // this is required only if you need to profile before container is created
 }
 
-Profiler::start("Demo application");
+Profiler::start(/* keep default label for better preview */);
 
 Profiler::start("Configure application");
 $configurator = new Configurator();
@@ -30,4 +30,4 @@ Profiler::start("Run");
 $container->getService("application")->run();
 Profiler::finish("Run");
 
-Profiler::finish("Demo application");
+Profiler::finish(/* keep default label for better preview */);
