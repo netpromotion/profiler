@@ -4,15 +4,19 @@ use Netpromotion\Profiler\Extension\ProfilerNetteExtension;
 use Netpromotion\Profiler\Profiler;
 use Nette\Configurator;
 
-require __DIR__ . "/../../vendor/autoload.php";
+require_once __DIR__ . "/../require_me.php";
 
-ProfilerNetteExtension::enable(); // this is required only if you need to profile before container is created
+if (DEBUG_MODE === true) {
+    ProfilerNetteExtension::enable(); // this is required only if you need to profile before container is created
+}
 
 Profiler::start("Demo application");
 
 Profiler::start("Configure application");
 $configurator = new Configurator();
-$configurator->setDebugMode(TRUE);
+if (DEBUG_MODE === true) {
+    $configurator->setDebugMode(true);
+}
 $configurator->enableDebugger(__DIR__ . "/log");
 $configurator->setTempDirectory(__DIR__ . "/temp");
 $configurator->addConfig(__DIR__ . "/config/config.neon");
