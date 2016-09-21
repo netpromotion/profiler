@@ -42,11 +42,11 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
 
         Profiler::start();
         Profiler::finish();
-        $this->assertEquals(2, substr_count($adapter->getPanel(), "<tr>"));
+        $this->assertEquals(3, substr_count($adapter->getPanel(), "<tr>"));
 
         Profiler::start();
         Profiler::finish();
-        $this->assertEquals(3, substr_count($adapter->getPanel(), "<tr>"));
+        $this->assertEquals(5, substr_count($adapter->getPanel(), "<tr>"));
     }
 
     /**

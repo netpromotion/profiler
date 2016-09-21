@@ -55,7 +55,21 @@ class TracyBarAdapter implements IBarPanel
      */
     public function getPanel()
     {
-        $table = "<table>";
+        if (count($this->profiles) == 0) {
+            $t0 = 0;
+            $tN = 0;
+        } else {
+            $t0 = $this->profiles[0]->meta[Profiler::START_TIME];
+            $tN = $this->profiles[0]->meta[Profiler::FINISH_TIME];
+            foreach ($this->profiles as $profile) {
+                $t0 = min($t0, $profile->meta[Profiler::START_TIME]);
+                $tN = max($tN, $profile->meta[Profiler::FINISH_TIME]);
+            }
+        }
+        $time = $tN - $t0;
+
+        $table = "<style>.nette-addons-profiler-bar {display:inline-block;margin:0;height:5px;}</style>";
+        $table .= "<table>";
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         foreach ($this->profiles as $profile) {
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
@@ -78,6 +92,24 @@ class TracyBarAdapter implements IBarPanel
                 $profile->absoluteDuration * 1000,
                 $profile->memoryUsageChange / 1024,
                 $profile->absoluteMemoryUsageChange / 1024
+            );
+
+            $before = floor(($profile->meta[Profiler::START_TIME] - $t0) / $time * 100);
+            $activeTime = floor($profile->duration / $time * 100);
+            $inactiveTime = floor(($profile->absoluteDuration - $profile->duration) / $time * 100);
+            $after = 100 - $before - $activeTime - $inactiveTime;
+
+            $table .= sprintf(
+                "<tr class='nette-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
+                "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
+                "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
+                "<span class='nette-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
+                "<span class='nette-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
+                "</td></tr>",
+                $before,
+                $activeTime,
+                $inactiveTime,
+                $after
             );
         }
         $table .= "</table>";
