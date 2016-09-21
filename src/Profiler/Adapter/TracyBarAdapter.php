@@ -68,7 +68,7 @@ class TracyBarAdapter implements IBarPanel
         }
         $time = $tN - $t0;
 
-        $table = "<style>.nette-addons-profiler-bar {display:inline-block;margin:0;height:5px;}</style>";
+        $table = "<style>.nette-addons-profiler-hidden{display:none}.nette-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         foreach ($this->profiles as $profile) {
@@ -100,7 +100,7 @@ class TracyBarAdapter implements IBarPanel
             $after = 100 - $before - $activeTime - $inactiveTime;
 
             $table .= sprintf(
-                "<tr class='nette-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
+                "<tr class='nette-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
                 "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
                 "<span class='nette-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
                 "<span class='nette-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
