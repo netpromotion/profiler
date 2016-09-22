@@ -5,7 +5,6 @@ namespace Netpromotion\Profiler\Extension;
 use Netpromotion\Profiler\Profiler;
 use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
-use Tracy\Debugger;
 
 class ProfilerNetteExtension extends CompilerExtension
 {
@@ -18,7 +17,8 @@ class ProfilerNetteExtension extends CompilerExtension
      */
     private static function isActive()
     {
-        if (!class_exists("Tracy\\Debugger") || Debugger::$productionMode === TRUE) {
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        if (!class_exists("Tracy\\Debugger") || \Tracy\Debugger::$productionMode === TRUE) {
             return false;
         } else {
             return true;
