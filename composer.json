@@ -17,10 +17,13 @@
   "require": {
     "php": ">=5.4",
     "petrknap/php-profiler": "^1.1",
-    "petrknap/php-singleton": "^1.0",
-    "tracy/tracy": "^2.4"
+    "petrknap/php-singleton": "^1.0"
+  },
+  "conflict": {
+    "tracy/tracy": "<2.4 || >=3"
   },
   "require-dev": {
+    "tracy/tracy": "*",
     "nette/bootstrap": "^2.3",
     "nette/application": "^2.3",
     "latte/latte": "^2.3",
