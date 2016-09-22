@@ -70,7 +70,7 @@ extensions:
     profiler: Netpromotion\Profiler\Extension\ProfilerNetteExtension
 ```
 
-If you wish to profile before the container is ready, call `ProfilerNetteExtension::enable` manually.
+If you wish to profile before the container is ready, call `Profiler::enable` manually.
 
 ![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/nette.png)
 
