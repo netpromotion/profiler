@@ -4,27 +4,56 @@ namespace Netpromotion\Profiler\Extension;
 
 use Netpromotion\Profiler\Profiler;
 use Nette\DI\CompilerExtension;
+use Nette\PhpGenerator\ClassType;
 use Tracy\Debugger;
 
 class ProfilerNetteExtension extends CompilerExtension
 {
+    const PROFILER = "Netpromotion\\Profiler\\Profiler";
     const TRACY_BAR_ADAPTER = "Netpromotion\\Profiler\\Adapter\\TracyBarAdapter";
 
-    public function loadConfiguration()
+    /**
+     * @internal
+     * @return bool
+     */
+    private static function isActive()
     {
         if (!class_exists("Tracy\\Debugger") || Debugger::$productionMode === TRUE) {
-            return;
+            return false;
+        } else {
+            return true;
         }
+    }
 
-        $builder = $this->getContainerBuilder();
-        $builder
-            ->addDefinition($this->prefix("panel"))
-            ->setClass(self::TRACY_BAR_ADAPTER);
-        $builder
-            ->getDefinition("tracy.bar")
-            ->addSetup("addPanel", ["@" . $this->prefix("panel")]);
+    /**
+     * @inheritdoc
+     */
+    public function loadConfiguration()
+    {
+        if (self::isActive()) {
+            $builder = $this->getContainerBuilder();
+            $builder
+                ->addDefinition($this->prefix("panel"))
+                ->setClass(self::TRACY_BAR_ADAPTER);
+            $builder
+                ->getDefinition("tracy.bar")
+                ->addSetup("addPanel", ["@" . $this->prefix("panel")]);
+        }
+    }
 
-        Profiler::enable();
+    /**
+     * @inheritdoc
+     */
+    public function afterCompile(ClassType $class)
+    {
+        if (self::isActive()) {
+            $method = $class->getMethod("__construct");
+            $method->setBody(sprintf(
+                "%s::enable();%s",
+                self::PROFILER,
+                $method->getBody()
+            ));
+        }
     }
 
     /**
