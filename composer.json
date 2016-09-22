@@ -17,8 +17,8 @@
   "require": {
     "php": ">=5.4",
     "petrknap/php-profiler": "^1.1",
-    "tracy/tracy": "^2.4",
-    "petrknap/php-singleton": "v0.1.0.4"
+    "petrknap/php-singleton": "^1.0",
+    "tracy/tracy": "^2.4"
   },
   "require-dev": {
     "nette/bootstrap": "^2.3",
