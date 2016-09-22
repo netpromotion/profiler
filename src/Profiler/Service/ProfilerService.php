@@ -14,10 +14,10 @@ class ProfilerService implements SingletonInterface
 {
     use SingletonTrait;
 
-    const TIME_LINE_BEFORE = "time_line_before";
-    const TIME_LINE_ACTIVE = "time_line_active";
-    const TIME_LINE_INACTIVE = "time_line_inactive";
-    const TIME_LINE_AFTER = "time_line_after";
+    const TIME_LINE_BEFORE = "time_line_before"; // int [0 - 100] percentage
+    const TIME_LINE_ACTIVE = "time_line_active"; // int [0 - 100] percentage
+    const TIME_LINE_INACTIVE = "time_line_inactive"; // int [0 - 100] percentage
+    const TIME_LINE_AFTER = "time_line_after"; // int [0 - 100] percentage
 
     /**
      * @var Profile[]
