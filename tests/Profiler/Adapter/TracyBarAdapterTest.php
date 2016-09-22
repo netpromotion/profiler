@@ -1,6 +1,6 @@
 <?php
 
-namespace Netpromotion\Profiler\Test;
+namespace Netpromotion\Profiler\Test\Adapter;
 
 use Netpromotion\Profiler\Adapter\TracyBarAdapter;
 use Netpromotion\Profiler\Profiler;
@@ -12,7 +12,7 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTabWorks()
     {
-        $adapter = TracyBarAdapter::create();
+        $adapter = new TracyBarAdapter();
 
         $this->assertContains("disabled", $adapter->getTab());
 
@@ -33,7 +33,7 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPanelWorks()
     {
-        $adapter = TracyBarAdapter::create();
+        $adapter = new TracyBarAdapter();
 
         $this->assertContains("disabled", $adapter->getPanel());
 
@@ -54,7 +54,7 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPanelJoinsIdenticalLabels()
     {
-        $adapter = TracyBarAdapter::create();
+        $adapter = new TracyBarAdapter();
 
         Profiler::enable();
 

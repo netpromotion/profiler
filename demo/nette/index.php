@@ -1,13 +1,12 @@
 <?php
 
-use Netpromotion\Profiler\Extension\ProfilerNetteExtension;
 use Netpromotion\Profiler\Profiler;
 use Nette\Configurator;
 
 require_once __DIR__ . "/../require_me.php";
 
 if (DEBUG_MODE === true) {
-    ProfilerNetteExtension::enable(); // this is required only if you need to profile before container is created
+    Profiler::enable(); // this is required only if you need to profile before container is created
 }
 
 Profiler::start(/* keep default label for better preview */);

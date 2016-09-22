@@ -2,6 +2,7 @@
 
 namespace Netpromotion\Profiler;
 
+use /** @noinspection PhpInternalEntityUsedInspection */ Netpromotion\Profiler\Service\ProfilerService;
 use PetrKnap\Php\Profiler\AdvancedProfiler;
 use PetrKnap\Php\Profiler\Profile;
 
@@ -23,28 +24,21 @@ class Profiler extends AdvancedProfiler
     protected static $postProcessor = null;
 
     /**
-     * @var callable[]
+     * @inheritdoc
      */
-    protected static $postProcessors;
+    public static function enable()
+    {
+        /** @noinspection PhpInternalEntityUsedInspection */
+        ProfilerService::init();
+        parent::enable();
+    }
 
     /**
      * @inheritdoc
+     * @internal
      */
-    public static function setPostProcessor(callable $postProcessor, $postProcessorId = "default")
+    public static function setPostProcessor(callable $postProcessor)
     {
-        static::$postProcessors[$postProcessorId] = $postProcessor;
-
-        $postProcessors = static::$postProcessors;
-        parent::setPostProcessor(function (Profile $profile) use ($postProcessors) {
-            foreach ($postProcessors as $key => $postProcessor) {
-                if ($key !== "default") {
-                    $profile = call_user_func($postProcessor, $profile);
-                }
-            }
-            if (isset($postProcessors["default"])) {
-                $profile = call_user_func($postProcessors["default"], $profile);
-            }
-            return $profile;
-        });
+        parent::setPostProcessor($postProcessor);
     }
 }

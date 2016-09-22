@@ -2,7 +2,6 @@
 
 namespace Netpromotion\Profiler\Extension;
 
-use Netpromotion\Profiler\Adapter\TracyBarAdapter;
 use Netpromotion\Profiler\Profiler;
 use Nette\DI\CompilerExtension;
 use Tracy\Debugger;
@@ -20,8 +19,7 @@ class ProfilerNetteExtension extends CompilerExtension
         $builder = $this->getContainerBuilder();
         $builder
             ->addDefinition($this->prefix("panel"))
-            ->setClass(self::TRACY_BAR_ADAPTER)
-            ->setFactory(self::TRACY_BAR_ADAPTER . "::create");
+            ->setClass(self::TRACY_BAR_ADAPTER);
         $builder
             ->getDefinition("tracy.bar")
             ->addSetup("addPanel", ["@" . $this->prefix("panel")]);
@@ -29,9 +27,13 @@ class ProfilerNetteExtension extends CompilerExtension
         Profiler::enable();
     }
 
+    /**
+     * TODO remove in version 2
+     *
+     * @deprecated will be removed in version 2
+     */
     public static function enable()
     {
-        TracyBarAdapter::create();
         Profiler::enable();
     }
 }
