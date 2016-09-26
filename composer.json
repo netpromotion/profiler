@@ -18,7 +18,8 @@
   "require": {
     "php": ">=5.4",
     "petrknap/php-profiler": "^1.1",
-    "petrknap/php-singleton": "^1.0"
+    "petrknap/php-singleton": "^1.0",
+    "maximebf/debugbar": "^1.13"
   },
   "conflict-note": "We are using 'conflict' combined with 'require-dev' to '*' as soft require.",
   "conflict": {
