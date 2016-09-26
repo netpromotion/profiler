@@ -18,8 +18,7 @@
   "require": {
     "php": ">=5.4",
     "petrknap/php-profiler": "^1.1",
-    "petrknap/php-singleton": "^1.0",
-    "barryvdh/laravel-debugbar": "^2.1"
+    "petrknap/php-singleton": "^1.0"
   },
   "conflict-note": "We are using 'conflict' combined with 'require-dev' to '*' as soft require.",
   "conflict": {
