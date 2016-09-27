@@ -135,16 +135,14 @@ class ProfilerService implements SingletonInterface
         $metaData = $this->getMetaData();
         $total = 0;
         $previousTime = $metaData[self::META_TIME_ZERO] * 1000;
-        $firstLoop = true;
         $height = 0;
         foreach ($metaData[self::META_TIME_LINE] as $time => $values) {
-            if ($firstLoop === true) {
-                $firstLoop = false;
-                continue;
-            }
             $width = floor(
                 ($time - $previousTime) / $this->metaData[self::META_TIME_TOTAL] / 10
             );
+            if ($width <= 0) {
+                continue;
+            }
             $height = floor(
                 $values[self::META_TIME_LINE__MEMORY_USAGE] / $this->metaData[self::META_MEMORY_PEAK] * 100
             );
