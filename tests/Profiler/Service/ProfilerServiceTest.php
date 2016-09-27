@@ -103,4 +103,47 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
             [[[0, 10, 5], [10, 20, 5]], [[0, 25, 25, 50], [50, 25, 25, 0]]]
         ];
     }
+
+    /**
+     * @runInSeparateProcess
+     * @dataProvider dataIterateMemoryTimeLineComputesCorrectValues
+     * @param int[][] $input
+     * @param int[] $expected
+     */
+    public function testIterateMemoryTimeLineComputesCorrectValues(array $input, array $expected)
+    {
+        /** @noinspection PhpInternalEntityUsedInspection */
+        $service = ProfilerService::getInstance();
+
+        foreach ($input as $profile) {
+            $times = array_keys($profile);
+            $memory = array_values($profile);
+            $profile = new Profile();
+            $profile->meta[Profiler::START_TIME] = $times[0];
+            $profile->meta[Profiler::FINISH_TIME] = $times[1];
+            $profile->meta[Profiler::START_MEMORY_USAGE] = $memory[0];
+            $profile->meta[Profiler::FINISH_MEMORY_USAGE] = $memory[1];
+
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $service->addProfile($profile);
+        }
+
+        $i = 0;
+        $widths = array_keys($expected);
+        $heights = array_values($expected);
+        $service->iterateMemoryTimeLine(function($width, $height) use ($widths, $heights, &$i) {
+            $this->assertEquals($widths[$i], $width);
+            $this->assertEquals($heights[$i], $height);
+            $i++;
+        });
+        $this->assertEquals(count($expected), $i);
+    }
+
+    public function dataIterateMemoryTimeLineComputesCorrectValues()
+    {
+        return [
+            [[[0 => 0, 10 => 10]], [0 => 0, 100 => 100]],
+            [[[0 => 1, 10 => 10], [4 => 6, 6 => 4]], [0 => 10, 40 => 60, 60 => 40, 100 => 100]],
+        ];
+    }
 }

@@ -16,6 +16,9 @@ class ProfilerService implements SingletonInterface
 
     const META_TIME_ZERO = "meta_time_zero";
     const META_TIME_TOTAL = "meta_time_total";
+    const META_MEMORY_PEAK = "meta_memory_peak";
+    const META_TIME_LINE = "meta_time_line";
+    const META_TIME_LINE__MEMORY_USAGE = "meta_time_line__memory_usage";
 
     const TIME_LINE_BEFORE = "time_line_before"; // int [0 - 100] percentage
     const TIME_LINE_ACTIVE = "time_line_active"; // int [0 - 100] percentage
@@ -71,6 +74,8 @@ class ProfilerService implements SingletonInterface
     private function getMetaData()
     {
         if (empty($this->metaData)) {
+            $this->metaData[self::META_TIME_LINE] = [];
+            $this->metaData[self::META_MEMORY_PEAK] = 0;
             if (count($this->profiles) == 0) {
                 $this->metaData[self::META_TIME_ZERO] = 0;
                 $timeEnd = 0;
@@ -86,9 +91,21 @@ class ProfilerService implements SingletonInterface
                         $timeEnd,
                         $profile->meta[Profiler::FINISH_TIME]
                     );
+                    $this->metaData[self::META_MEMORY_PEAK] = max(
+                        $this->metaData[self::META_MEMORY_PEAK],
+                        $profile->meta[Profiler::START_MEMORY_USAGE],
+                        $profile->meta[Profiler::FINISH_MEMORY_USAGE]
+                    );
+                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::START_TIME]] = [
+                        self::META_TIME_LINE__MEMORY_USAGE => $profile->meta[Profiler::START_MEMORY_USAGE]
+                    ];
+                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::FINISH_TIME]] = [
+                        self::META_TIME_LINE__MEMORY_USAGE => $profile->meta[Profiler::FINISH_MEMORY_USAGE]
+                    ];
                 }
             }
             $this->metaData[self::META_TIME_TOTAL] = max($timeEnd - $this->metaData[self::META_TIME_ZERO], 0.001);
+            ksort($this->metaData[self::META_TIME_LINE]);
         }
 
         return $this->metaData;
@@ -110,6 +127,25 @@ class ProfilerService implements SingletonInterface
             $profile->meta[static::TIME_LINE_AFTER] = 100 - $profile->meta[static::TIME_LINE_BEFORE] - $profile->meta[static::TIME_LINE_ACTIVE] - $profile->meta[static::TIME_LINE_INACTIVE];
 
             call_user_func($callback, $profile);
+        }
+    }
+
+    public function iterateMemoryTimeLine(callable $callback)
+    {
+        $metaData = $this->getMetaData();
+        $total = 0;
+        foreach ($metaData[self::META_TIME_LINE] as $time => $values) {
+            $width = floor(
+                $time / $this->metaData[self::META_TIME_TOTAL] * 100
+            );
+            $height = floor(
+                $values[self::META_TIME_LINE__MEMORY_USAGE] / $this->metaData[self::META_MEMORY_PEAK] * 100
+            );
+            $total += $width;
+            call_user_func($callback, $width, $height);
+        }
+        if ($total < 100) {
+            call_user_func($callback, 100 - $total, 0);
         }
     }
 }
