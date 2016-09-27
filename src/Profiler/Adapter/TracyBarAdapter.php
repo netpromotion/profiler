@@ -38,8 +38,19 @@ class TracyBarAdapter implements IBarPanel
      */
     public function getPanel()
     {
-        $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
+        $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar,.tracy-addons-profiler-chart{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
+
+        $memoryChart = "";
+        $this->profilerService->iterateMemoryTimeLine(function ($width, $height) use (&$memoryChart) {
+            $memoryChart .= sprintf(
+                "<span class='tracy-addons-profiler-chart' style='width:%d%%;height:%d%%;background-color:#6ba9e6;'></span>",
+                $width,
+                $height
+            );
+        });
+        $table .= "<tr><td colspan='4' style='height:3.2em'>" . $memoryChart . "</td></tr>";
+
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
@@ -78,7 +89,9 @@ class TracyBarAdapter implements IBarPanel
                 $profile->meta[ProfilerService::TIME_LINE_AFTER]
             );
         });
+
         $table .= "</table>";
+
         return sprintf(
             "<h1>Profiler info</h1><div class='tracy-inner'>%s</div>",
             Profiler::isEnabled() ? $table : "Profiling is disabled."
