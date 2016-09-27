@@ -96,10 +96,10 @@ class ProfilerService implements SingletonInterface
                         $profile->meta[Profiler::START_MEMORY_USAGE],
                         $profile->meta[Profiler::FINISH_MEMORY_USAGE]
                     );
-                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::START_TIME]] = [
+                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::START_TIME] * 1000] = [
                         self::META_TIME_LINE__MEMORY_USAGE => $profile->meta[Profiler::START_MEMORY_USAGE]
                     ];
-                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::FINISH_TIME]] = [
+                    $this->metaData[self::META_TIME_LINE][$profile->meta[Profiler::FINISH_TIME] * 1000] = [
                         self::META_TIME_LINE__MEMORY_USAGE => $profile->meta[Profiler::FINISH_MEMORY_USAGE]
                     ];
                 }
@@ -134,18 +134,26 @@ class ProfilerService implements SingletonInterface
     {
         $metaData = $this->getMetaData();
         $total = 0;
+        $previousTime = $metaData[self::META_TIME_ZERO] * 1000;
+        $firstLoop = true;
+        $height = 0;
         foreach ($metaData[self::META_TIME_LINE] as $time => $values) {
+            if ($firstLoop === true) {
+                $firstLoop = false;
+                continue;
+            }
             $width = floor(
-                $time / $this->metaData[self::META_TIME_TOTAL] * 100
+                ($time - $previousTime) / $this->metaData[self::META_TIME_TOTAL] / 10
             );
             $height = floor(
                 $values[self::META_TIME_LINE__MEMORY_USAGE] / $this->metaData[self::META_MEMORY_PEAK] * 100
             );
             $total += $width;
+            $previousTime = $time;
             call_user_func($callback, $width, $height);
         }
         if ($total < 100) {
-            call_user_func($callback, 100 - $total, 0);
+            call_user_func($callback, 100 - $total, $height);
         }
     }
 }
