@@ -62,11 +62,11 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
-     * @dataProvider dataIterateProfilesComputesRightTimeLineValues
+     * @dataProvider dataIterateProfilesComputesCorrectValues
      * @param int[][] $times
      * @param int[][] $percentages
      */
-    public function testIterateProfilesComputesRightTimeLineValues(array $times, array $percentages)
+    public function testIterateProfilesComputesCorrectValues(array $times, array $percentages)
     {
         /** @noinspection PhpInternalEntityUsedInspection */
         $service = ProfilerService::getInstance();
@@ -96,7 +96,7 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(count($times), $i);
     }
 
-    public function dataIterateProfilesComputesRightTimeLineValues()
+    public function dataIterateProfilesComputesCorrectValues()
     {
         return [
             [[[0, 10, 5]], [[0, 50, 50, 0]]],
