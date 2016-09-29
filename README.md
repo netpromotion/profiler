@@ -72,7 +72,7 @@ extensions:
 
 If you wish to profile before the container is ready, call `Profiler::enable` manually.
 
-![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/nette.png)
+![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/tracy.png)
 
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
 
