@@ -90,7 +90,11 @@ class TracyBarAdapter implements IBarPanel
 
     private function getMemoryChart()
     {
-        $colors = ["#000000", "#cccccc", "#6ba9e6"];
+        $colors = [
+            "axis" => "#000000",
+            "gridLines" => "#cccccc",
+            "memoryUsage" => "#6ba9e6"
+        ];
         $maxWidth = 596;
         $maxHeight = 86;
         $gridStep = 10;
@@ -107,7 +111,7 @@ class TracyBarAdapter implements IBarPanel
                 $tmpY + $margin,
                 $maxWidth + $margin,
                 $tmpY + $margin,
-                $colors[1]
+                $colors["gridLines"]
             );
         }
         for ($tmpX = $gridStep; $tmpX < $maxWidth; $tmpX += $gridStep) {
@@ -117,7 +121,7 @@ class TracyBarAdapter implements IBarPanel
                 $margin,
                 $tmpX + $margin,
                 $maxHeight + $margin,
-                $colors[1]
+                $colors["gridLines"]
             );
         }
 
@@ -142,7 +146,7 @@ class TracyBarAdapter implements IBarPanel
                 $prevY + $margin,
                 $thisX + $margin,
                 $thisY + $margin,
-                $colors[2]
+                $colors["memoryUsage"]
             );
             $prevX = $thisX;
             $prevY = $thisY;
@@ -154,7 +158,7 @@ class TracyBarAdapter implements IBarPanel
             $maxHeight + $margin,
             $maxWidth + $margin,
             $maxHeight + $margin,
-            $colors[0]
+            $colors["axis"]
         );
         $memoryChart .= sprintf(
             "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
@@ -162,7 +166,7 @@ class TracyBarAdapter implements IBarPanel
             $margin,
             $margin,
             $maxHeight + $margin,
-            $colors[0]
+            $colors["axis"]
         );
 
         $memoryChart .= "</svg>";
