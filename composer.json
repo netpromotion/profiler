@@ -11,7 +11,8 @@
   "config": {
     "platform": {
       "php": "5.4.45",
-      "ext-dom": true
+      "ext-dom": true,
+      "ext-mbstring": true
     }
   },
   "require": {
@@ -30,7 +31,9 @@
     "nette/bootstrap": "^2.3",
     "nette/application": "^2.3",
     "latte/latte": "^2.3",
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "netpromotion/tracy-wrapper": "1.0.0-a1 as 1.0.0",
+    "laravel/lumen-framework": "^5.0"
   },
   "autoload": {
     "psr-4": {
