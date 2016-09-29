@@ -32,6 +32,7 @@
     "nette/application": "^2.3",
     "latte/latte": "^2.3",
     "phpunit/phpunit": "^4.8",
+    "netpromotion/tracy-wrapper": "1.0.0-a1 as 1.0.0",
     "laravel/lumen-framework": "^5.0"
   },
   "autoload": {
