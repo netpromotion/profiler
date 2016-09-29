@@ -6,5 +6,12 @@ use Nette\Application\UI\Presenter;
 
 class HomepagePresenter extends Presenter
 {
-    // Empty class
+    /**
+     * @inheritdoc
+     */
+    public function startup()
+    {
+        doSomething();
+        return parent::startup();
+    }
 }
