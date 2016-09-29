@@ -40,7 +40,7 @@ class TracyBarAdapter implements IBarPanel
     {
         $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
-        $table .= "<tr><td colspan='4' style='height:3.2em'>" . $this->getMemoryChart() . "</td></tr>";
+        $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
@@ -96,16 +96,18 @@ class TracyBarAdapter implements IBarPanel
             "memoryUsage" => "#6ba9e6",
             "memoryUsagePoint" => "#3987d4"
         ];
-        $maxWidth = 596;
-        $maxHeight = 86;
-        $gridStep = 10;
         $margin = 3;
+        $maxWidth = 600 - 2 * $margin;
+        $maxHeight = 90 - 2 * $margin;
+        $gridStep = 10;
         $memoryChart = sprintf(
-            "<!--suppress HtmlUnknownAttribute --><svg style='width: 100%%' viewBox='0 0 %d %d' xmlns='http://www.w3.org/2000/svg'>",
+            "<!--suppress HtmlUnknownAttribute --><svg style='width: %dpx; height: %dpx' viewBox='0 0 %d %d' xmlns='http://www.w3.org/2000/svg'>",
+            $maxWidth + 2 * $margin,
+            $maxHeight + 2 * $margin,
             $maxWidth + 2 * $margin,
             $maxHeight + 2 * $margin
         );
-        for ($tmpY = 0; $tmpY < $maxHeight; $tmpY += $gridStep) {
+        for ($tmpY = $maxHeight; $tmpY > 0; $tmpY -= $gridStep) {
             $memoryChart .= sprintf(
                 "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
                 $margin,
