@@ -116,17 +116,17 @@ class ProfilerService implements SingletonInterface
         $metaData = $this->getMetaData();
         foreach ($this->profiles as $profile) {
             $profile->meta[static::TIME_LINE_BEFORE] = floor(
-                ($profile->meta[Profiler::START_TIME] - $metaData[self::META_TIME_ZERO]) / $this->metaData[self::META_TIME_TOTAL] * 100
+                ($profile->meta[Profiler::START_TIME] - $metaData[self::META_TIME_ZERO]) / $metaData[self::META_TIME_TOTAL] * 100
             );
             $profile->meta[static::TIME_LINE_ACTIVE] = floor(
-                $profile->duration / $this->metaData[self::META_TIME_TOTAL] * 100
+                $profile->duration / $metaData[self::META_TIME_TOTAL] * 100
             );
             $profile->meta[static::TIME_LINE_INACTIVE] = floor(
-                ($profile->absoluteDuration - $profile->duration) / $this->metaData[self::META_TIME_TOTAL] * 100
+                ($profile->absoluteDuration - $profile->duration) / $metaData[self::META_TIME_TOTAL] * 100
             );
             $profile->meta[static::TIME_LINE_AFTER] = 100 - $profile->meta[static::TIME_LINE_BEFORE] - $profile->meta[static::TIME_LINE_ACTIVE] - $profile->meta[static::TIME_LINE_INACTIVE];
 
-            call_user_func($callback, $profile);
+            call_user_func($callback, $profile, $metaData);
         }
     }
 
@@ -138,20 +138,20 @@ class ProfilerService implements SingletonInterface
         $height = 0;
         foreach ($metaData[self::META_TIME_LINE] as $time => $values) {
             $width = floor(
-                ($time - $previousTime) / $this->metaData[self::META_TIME_TOTAL] / 10
+                ($time - $previousTime) / $metaData[self::META_TIME_TOTAL] / 10
             );
             if ($width <= 0) {
                 continue;
             }
             $height = floor(
-                $values[self::META_TIME_LINE__MEMORY_USAGE] / $this->metaData[self::META_MEMORY_PEAK] * 100
+                $values[self::META_TIME_LINE__MEMORY_USAGE] / $metaData[self::META_MEMORY_PEAK] * 100
             );
             $total += $width;
             $previousTime = $time;
-            call_user_func($callback, $width, $height);
+            call_user_func($callback, $width, $height, $metaData);
         }
         if ($total < 100) {
-            call_user_func($callback, 100 - $total, $height);
+            call_user_func($callback, 100 - $total, $height, $metaData);
         }
     }
 }
