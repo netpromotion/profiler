@@ -91,35 +91,79 @@ class TracyBarAdapter implements IBarPanel
     private function getMemoryChart()
     {
         $colors = ["#000000", "#cccccc", "#6ba9e6"];
-        $maxWidth = 600;
-        $maxHeight = 90;
+        $maxWidth = 596;
+        $maxHeight = 86;
         $gridStep = 10;
-        $memoryChart = "<!--suppress HtmlUnknownAttribute --><svg style='width: 100%' viewBox='0 0 {$maxWidth} {$maxHeight}' xmlns='http://www.w3.org/2000/svg'>";
+        $margin = 3;
+        $memoryChart = sprintf(
+            "<!--suppress HtmlUnknownAttribute --><svg style='width: 100%%' viewBox='0 0 %d %d' xmlns='http://www.w3.org/2000/svg'>",
+            $maxWidth + 2 * $margin,
+            $maxHeight + 2 * $margin
+        );
         for ($tmpY = 0; $tmpY < $maxHeight; $tmpY += $gridStep) {
-            $memoryChart .= "<line x1='0' y1='{$tmpY}' x2='{$maxWidth}' y2='{$tmpY}' stroke-width='1' stroke='{$colors[1]}' />";
+            $memoryChart .= sprintf(
+                "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+                $margin,
+                $tmpY + $margin,
+                $maxWidth + $margin,
+                $tmpY + $margin,
+                $colors[1]
+            );
         }
         for ($tmpX = $gridStep; $tmpX < $maxWidth; $tmpX += $gridStep) {
-            $memoryChart .= "<line x1='{$tmpX}' y1='0' x2='{$tmpX}' y2='{$maxHeight}' stroke-width='1' stroke='{$colors[1]}' />";
+            $memoryChart .= sprintf(
+                "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+                $tmpX + $margin,
+                $margin,
+                $tmpX + $margin,
+                $maxHeight + $margin,
+                $colors[1]
+            );
         }
-        $memoryChart .= "<line x1='0' y1='{$maxHeight}' x2='{$maxWidth}' y2='{$maxHeight}' stroke-width='1' stroke='{$colors[0]}' />";
-        $memoryChart .= "<line x1='0' y1='0' x2='0' y2='{$maxHeight}' stroke-width='1' stroke='{$colors[0]}' />";
 
         $prevX = 0;
         $prevY = $maxHeight;
-        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, &$prevX, &$prevY) {
+        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY) {
             if ($prevX == 0) {
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $memoryChart .= sprintf(
-                    "<text x='5' y='10' font-size='10'>%d kB</text>",
+                    "<text x='%d' y='%d' font-size='%d'>%d kB</text>",
+                    $margin * 2,
+                    10 / 2 + $margin * 2,
+                    10,
                     floor($metaData[ProfilerService::META_MEMORY_PEAK] / 1024)
                 );
             }
             $thisX = floor($prevX + $width * $maxWidth / 100);
             $thisY = floor($maxHeight - $height * $maxHeight / 100);
-            $memoryChart .= "<line x1='{$prevX}' y1='{$prevY}' x2='{$thisX}' y2='{$thisY}' stroke-width='1' stroke='{$colors[2]}' />";
+            $memoryChart .= sprintf(
+                "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+                $prevX + $margin,
+                $prevY + $margin,
+                $thisX + $margin,
+                $thisY + $margin,
+                $colors[2]
+            );
             $prevX = $thisX;
             $prevY = $thisY;
         });
+
+        $memoryChart .= sprintf(
+            "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+            $margin,
+            $maxHeight + $margin,
+            $maxWidth + $margin,
+            $maxHeight + $margin,
+            $colors[0]
+        );
+        $memoryChart .= sprintf(
+            "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+            $margin,
+            $margin,
+            $margin,
+            $maxHeight + $margin,
+            $colors[0]
+        );
 
         $memoryChart .= "</svg>";
 
