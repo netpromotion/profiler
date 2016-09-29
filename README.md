@@ -60,6 +60,8 @@ If you wish to know more about [Profiler], please visit [Profiler's README.md].
 
 Run `composer require netpromotion/profiler` in your project directory.
 
+![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/tracy.png)
+
 
 ### [Nette]
 
@@ -72,9 +74,20 @@ extensions:
 
 If you wish to profile before the container is ready, call `Profiler::enable` manually.
 
-![Adapter for Tracy](https://raw.githubusercontent.com/netpromotion/profiler/master/demo/tracy.png)
-
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
+
+
+### [Lumen], pure PHP and everything else
+
+Add panel `Netpromotion\Profiler\Adapter\TracyBarAdapter` to your bar via `Bar::addPanel` method manually or use [netpromotion/tracy-wrapper].
+
+```php
+tracy_wrap(function() {
+    /* your code goes here */
+}, [new TracyBarAdapter()]);
+```
+
+There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/lumen/).
 
 
 
@@ -82,3 +95,5 @@ There is a live demo available - run `make demo` and [click here](http://127.0.0
 [Tracy]:https://tracy.nette.org/
 [Profiler's README.md]:https://github.com/petrknap/php-profiler/blob/master/README.md
 [Nette]:https://nette.org/
+[Lumen]:https://lumen.laravel.com/
+[netpromotion/tracy-wrapper]:https://github.com/netpromotion/tracy-wrapper
