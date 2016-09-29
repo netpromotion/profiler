@@ -93,7 +93,8 @@ class TracyBarAdapter implements IBarPanel
         $colors = [
             "axis" => "#000000",
             "gridLines" => "#cccccc",
-            "memoryUsage" => "#6ba9e6"
+            "memoryUsage" => "#6ba9e6",
+            "memoryUsagePoint" => "#3987d4"
         ];
         $maxWidth = 596;
         $maxHeight = 86;
@@ -127,7 +128,9 @@ class TracyBarAdapter implements IBarPanel
 
         $prevX = 0;
         $prevY = $maxHeight;
-        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY) {
+        $lines = "";
+        $points = "";
+        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY, &$lines, &$points) {
             if ($prevX == 0) {
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $memoryChart .= sprintf(
@@ -140,7 +143,7 @@ class TracyBarAdapter implements IBarPanel
             }
             $thisX = floor($prevX + $width * $maxWidth / 100);
             $thisY = floor($maxHeight - $height * $maxHeight / 100);
-            $memoryChart .= sprintf(
+            $lines .= sprintf(
                 "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
                 $prevX + $margin,
                 $prevY + $margin,
@@ -148,9 +151,25 @@ class TracyBarAdapter implements IBarPanel
                 $thisY + $margin,
                 $colors["memoryUsage"]
             );
+            $points .= sprintf(
+                "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />".
+                "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
+                $thisX + $margin,
+                $thisY + $margin - 3,
+                $thisX + $margin,
+                $thisY + $margin + 3,
+                $colors["memoryUsagePoint"],
+                $thisX + $margin - 3,
+                $thisY + $margin,
+                $thisX + $margin + 3,
+                $thisY + $margin,
+                $colors["memoryUsagePoint"]
+            );
             $prevX = $thisX;
             $prevY = $thisY;
         });
+
+        $memoryChart .= $lines . $points;
 
         $memoryChart .= sprintf(
             "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
