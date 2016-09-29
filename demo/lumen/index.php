@@ -8,7 +8,7 @@ use Tracy\Debugger;
 require_once __DIR__ . "/../require_me.php";
 
 if (DEBUG_MODE === true) {
-    Debugger::enable(true);
+    Debugger::enable(true, __DIR__ . "/storage/logs");
     Profiler::enable();
 }
 
