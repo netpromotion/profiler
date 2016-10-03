@@ -12,6 +12,7 @@ class TracyBarAdapter implements IBarPanel
     const CONFIG_SHOW = "show";
     const CONFIG_SHOW_MEMORY_USAGE_CHART = "memoryUsageChart";
     const CONFIG_SHOW_SHORT_PROFILES = "shortProfiles";
+    const CONFIG_SHOW_TIME_LINES = "timeLines";
 
     private $profilerService;
 
@@ -34,7 +35,8 @@ class TracyBarAdapter implements IBarPanel
         return [
             self::CONFIG_SHOW => [
                 self::CONFIG_SHOW_MEMORY_USAGE_CHART => true,
-                self::CONFIG_SHOW_SHORT_PROFILES => true
+                self::CONFIG_SHOW_SHORT_PROFILES => true,
+                self::CONFIG_SHOW_TIME_LINES => true
             ]
         ];
     }
@@ -93,19 +95,21 @@ class TracyBarAdapter implements IBarPanel
                 $profile->absoluteMemoryUsageChange / 1024
             );
 
-            /** @noinspection PhpInternalEntityUsedInspection */
-            $table .= sprintf(
-                "<tr class='tracy-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
-                "</td></tr>",
-                $profile->meta[ProfilerService::TIME_LINE_BEFORE],
-                $profile->meta[ProfilerService::TIME_LINE_ACTIVE],
-                $profile->meta[ProfilerService::TIME_LINE_INACTIVE],
-                $profile->meta[ProfilerService::TIME_LINE_AFTER]
-            );
+            if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_TIME_LINES]) {
+                /** @noinspection PhpInternalEntityUsedInspection */
+                $table .= sprintf(
+                    "<tr class='tracy-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
+                    "</td></tr>",
+                    $profile->meta[ProfilerService::TIME_LINE_BEFORE],
+                    $profile->meta[ProfilerService::TIME_LINE_ACTIVE],
+                    $profile->meta[ProfilerService::TIME_LINE_INACTIVE],
+                    $profile->meta[ProfilerService::TIME_LINE_AFTER]
+                );
+            }
         });
 
         $table .= "</table>";
