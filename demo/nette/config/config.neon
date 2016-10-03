@@ -4,10 +4,6 @@ extensions:
 profiler:
     profile:
         createService: true
-    bar:
-        show:
-            memoryUsageChart: true
-            shortProfiles: true
 
 application:
     scanDirs: false

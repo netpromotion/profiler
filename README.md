@@ -82,7 +82,7 @@ profiler:
         createService: false  # or true
     bar:
         show:
-            memoryUsageChart: false  # or true
+            memoryUsageChart: true  # or false
             shortProfiles: true  # or false
 ```
 
@@ -98,7 +98,7 @@ tracy_wrap(function() {
     /* your code goes here */
 }, [new TracyBarAdapter([
     "show" => [
-        "memoryUsageChart" => false, // or true
+        "memoryUsageChart" => true, // or false
         "shortProfiles" => true // or false
     ]
 ])]);

@@ -33,8 +33,8 @@ class TracyBarAdapter implements IBarPanel
     {
         return [
             self::CONFIG_SHOW => [
-                self::CONFIG_SHOW_MEMORY_USAGE_CHART => false,
-                self::CONFIG_SHOW_SHORT_PROFILES => false
+                self::CONFIG_SHOW_MEMORY_USAGE_CHART => true,
+                self::CONFIG_SHOW_SHORT_PROFILES => true
             ]
         ];
     }

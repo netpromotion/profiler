@@ -31,8 +31,4 @@ tracy_wrap(function() {
     $app->run();
 
     Profiler::finish(/* keep default label for better preview */);
-}, [new TracyBarAdapter([
-    TracyBarAdapter::CONFIG_SHOW => [
-        TracyBarAdapter::CONFIG_SHOW_MEMORY_USAGE_CHART => true
-    ]
-])]);
+}, [new TracyBarAdapter()]);
