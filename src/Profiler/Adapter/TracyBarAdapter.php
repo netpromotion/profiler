@@ -9,6 +9,9 @@ use Tracy\IBarPanel;
 
 class TracyBarAdapter implements IBarPanel
 {
+    const CONFIG_PRIMARY_VALUE = "primaryValue";
+    const CONFIG_PRIMARY_VALUE_ABSOLUTE = "absolute";
+    const CONFIG_PRIMARY_VALUE_EFFECTIVE = "effective";
     const CONFIG_SHOW = "show";
     const CONFIG_SHOW_MEMORY_USAGE_CHART = "memoryUsageChart";
     const CONFIG_SHOW_SHORT_PROFILES = "shortProfiles";
@@ -33,6 +36,7 @@ class TracyBarAdapter implements IBarPanel
     public static function getDefaultConfig()
     {
         return [
+            self::CONFIG_PRIMARY_VALUE => self::CONFIG_PRIMARY_VALUE_EFFECTIVE,
             self::CONFIG_SHOW => [
                 self::CONFIG_SHOW_MEMORY_USAGE_CHART => true,
                 self::CONFIG_SHOW_SHORT_PROFILES => true,
@@ -67,7 +71,11 @@ class TracyBarAdapter implements IBarPanel
         if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_MEMORY_USAGE_CHART]) {
             $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
         }
-        $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
+        if ($this->config[self::CONFIG_PRIMARY_VALUE] == self::CONFIG_PRIMARY_VALUE_EFFECTIVE) {
+            $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
+        } else {
+            $table .= "<tr><th>Start</th><th>Finish</th><th>Time (effective)</th><th>Memory change (effective)</th></tr>";
+        }
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
             /** @noinspection PhpInternalEntityUsedInspection */
             if (!$this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_SHORT_PROFILES] && ($profile->meta[ProfilerService::TIME_LINE_ACTIVE] + $profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
@@ -86,14 +94,26 @@ class TracyBarAdapter implements IBarPanel
                     $profile->meta[Profiler::FINISH_LABEL]
                 );
             }
-            $table .= sprintf(
-                "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
-                $labels,
-                $profile->duration * 1000,
-                $profile->absoluteDuration * 1000,
-                $profile->memoryUsageChange / 1024,
-                $profile->absoluteMemoryUsageChange / 1024
-            );
+
+            if ($this->config[self::CONFIG_PRIMARY_VALUE] == self::CONFIG_PRIMARY_VALUE_EFFECTIVE) {
+                $table .= sprintf(
+                    "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
+                    $labels,
+                    $profile->duration * 1000,
+                    $profile->absoluteDuration * 1000,
+                    $profile->memoryUsageChange / 1024,
+                    $profile->absoluteMemoryUsageChange / 1024
+                );
+            } else {
+                $table .= sprintf(
+                    "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
+                    $labels,
+                    $profile->absoluteDuration * 1000,
+                    $profile->duration * 1000,
+                    $profile->absoluteMemoryUsageChange / 1024,
+                    $profile->memoryUsageChange / 1024
+                );
+            }
 
             if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_TIME_LINES]) {
                 /** @noinspection PhpInternalEntityUsedInspection */

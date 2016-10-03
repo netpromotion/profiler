@@ -81,6 +81,7 @@ profiler:
     profile:
         createService: false  # or true
     bar:
+        primaryValue: effective  # or absolute
         show:
             memoryUsageChart: true  # or false
             shortProfiles: true  # or false
@@ -98,6 +99,7 @@ Add panel `Netpromotion\Profiler\Adapter\TracyBarAdapter` to your bar via `Bar::
 tracy_wrap(function() {
     /* your code goes here */
 }, [new TracyBarAdapter([
+    "primaryValue" => "effective", // or "absolute"
     "show" => [
         "memoryUsageChart" => true, // or false
         "shortProfiles" => true, // or false
