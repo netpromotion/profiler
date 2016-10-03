@@ -9,12 +9,32 @@ use Tracy\IBarPanel;
 
 class TracyBarAdapter implements IBarPanel
 {
+    const CONFIG_SHOW = "show";
+    const CONFIG_SHOW_MEMORY_USAGE_CHART = "memoryUsageChart";
+
     private $profilerService;
 
-    public function __construct()
+    private $config;
+
+    public function __construct(array $config)
     {
+        $this->config = $config;
+
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->profilerService = ProfilerService::getInstance();
+    }
+
+    /**
+     * @internal
+     * @return array
+     */
+    public static function getDefaultConfig()
+    {
+        return [
+            self::CONFIG_SHOW => [
+                self::CONFIG_SHOW_MEMORY_USAGE_CHART => false
+            ]
+        ];
     }
 
     /**
@@ -40,7 +60,9 @@ class TracyBarAdapter implements IBarPanel
     {
         $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
-        $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
+        if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_MEMORY_USAGE_CHART]) {
+            $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
+        }
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {

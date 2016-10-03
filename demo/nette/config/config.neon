@@ -4,6 +4,9 @@ extensions:
 profiler:
     profile:
         createService: true
+    bar:
+        show:
+            memoryUsageChart: true
 
 application:
     scanDirs: false

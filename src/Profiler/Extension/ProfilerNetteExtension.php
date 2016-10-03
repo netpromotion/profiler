@@ -2,6 +2,7 @@
 
 namespace Netpromotion\Profiler\Extension;
 
+use Netpromotion\Profiler\Adapter\TracyBarAdapter;
 use Netpromotion\Profiler\Profiler;
 use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
@@ -11,14 +12,9 @@ class ProfilerNetteExtension extends CompilerExtension
     const PROFILER = "Netpromotion\\Profiler\\Profiler";
     const TRACY_BAR_ADAPTER = "Netpromotion\\Profiler\\Adapter\\TracyBarAdapter";
 
+    const CONFIG_TRACY_BAR = "bar";
     const CONFIG_PROFILE = "profile";
     const CONFIG_PROFILE_CREATE_SERVICE = "createService";
-
-    private $defaultConfig = [
-        self::CONFIG_PROFILE => [
-            self::CONFIG_PROFILE_CREATE_SERVICE => false
-        ]
-    ];
 
     /**
      * @internal
@@ -40,12 +36,18 @@ class ProfilerNetteExtension extends CompilerExtension
     public function loadConfiguration()
     {
         if (self::isActive()) {
-            $this->validateConfig($this->defaultConfig);
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $this->validateConfig([
+                self::CONFIG_PROFILE => [
+                    self::CONFIG_PROFILE_CREATE_SERVICE => false
+                ],
+                self::CONFIG_TRACY_BAR => TracyBarAdapter::getDefaultConfig()
+            ]);
 
             $builder = $this->getContainerBuilder();
             $builder
                 ->addDefinition($this->prefix("panel"))
-                ->setClass(self::TRACY_BAR_ADAPTER);
+                ->setFactory(self::TRACY_BAR_ADAPTER, [$this->config[self::CONFIG_TRACY_BAR]]);
             $builder
                 ->getDefinition("tracy.bar")
                 ->addSetup("addPanel", ["@" . $this->prefix("panel")]);
