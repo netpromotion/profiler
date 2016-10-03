@@ -11,6 +11,15 @@ class ProfilerNetteExtension extends CompilerExtension
     const PROFILER = "Netpromotion\\Profiler\\Profiler";
     const TRACY_BAR_ADAPTER = "Netpromotion\\Profiler\\Adapter\\TracyBarAdapter";
 
+    const CONFIG_PROFILE = "profile";
+    const CONFIG_PROFILE_CREATE_SERVICE = "createService";
+
+    private $defaultConfig = [
+        self::CONFIG_PROFILE => [
+            self::CONFIG_PROFILE_CREATE_SERVICE => false
+        ]
+    ];
+
     /**
      * @internal
      * @return bool
@@ -31,6 +40,8 @@ class ProfilerNetteExtension extends CompilerExtension
     public function loadConfiguration()
     {
         if (self::isActive()) {
+            $this->validateConfig($this->defaultConfig);
+
             $builder = $this->getContainerBuilder();
             $builder
                 ->addDefinition($this->prefix("panel"))
@@ -47,12 +58,26 @@ class ProfilerNetteExtension extends CompilerExtension
     public function afterCompile(ClassType $class)
     {
         if (self::isActive()) {
-            $method = $class->getMethod("__construct");
-            $method->setBody(sprintf(
+            $__construct = $class->getMethod("__construct");
+            $__construct->setBody(sprintf(
                 "%s::enable();%s",
                 self::PROFILER,
-                $method->getBody()
+                $__construct->getBody()
             ));
+
+            if ($this->config[self::CONFIG_PROFILE][self::CONFIG_PROFILE_CREATE_SERVICE]) {
+                foreach ($class->getMethods() as $method) {
+                    if (preg_match('/^createService/', $method->getName())) {
+                        $createService = &$method;
+                        $createService->setBody(sprintf(
+                            "%s::start(__METHOD__);%s%s::finish(__METHOD__);return \$return;",
+                            self::PROFILER,
+                            str_replace("return ", "\$return = ", $createService->getBody()),
+                            self::PROFILER
+                        ));
+                    }
+                }
+            }
         }
     }
 
