@@ -11,6 +11,7 @@ class TracyBarAdapter implements IBarPanel
 {
     const CONFIG_SHOW = "show";
     const CONFIG_SHOW_MEMORY_USAGE_CHART = "memoryUsageChart";
+    const CONFIG_SHOW_SHORT_PROFILES = "shortProfiles";
 
     private $profilerService;
 
@@ -32,7 +33,8 @@ class TracyBarAdapter implements IBarPanel
     {
         return [
             self::CONFIG_SHOW => [
-                self::CONFIG_SHOW_MEMORY_USAGE_CHART => false
+                self::CONFIG_SHOW_MEMORY_USAGE_CHART => false,
+                self::CONFIG_SHOW_SHORT_PROFILES => false
             ]
         ];
     }
@@ -65,6 +67,10 @@ class TracyBarAdapter implements IBarPanel
         }
         $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
+            /** @noinspection PhpInternalEntityUsedInspection */
+            if (!$this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_SHORT_PROFILES] && ($profile->meta[ProfilerService::TIME_LINE_ACTIVE] + $profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
+                return /* continue */;
+            }
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
                 $labels = sprintf(
                     "<td colspan='2'>%s</td>",

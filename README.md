@@ -83,6 +83,7 @@ profiler:
     bar:
         show:
             memoryUsageChart: false  # or true
+            shortProfiles: true  # or false
 ```
 
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
@@ -97,7 +98,8 @@ tracy_wrap(function() {
     /* your code goes here */
 }, [new TracyBarAdapter([
     "show" => [
-        "memoryUsageChart" => false // or true
+        "memoryUsageChart" => false, // or true
+        "shortProfiles" => true // or false
     ]
 ])]);
 ```
