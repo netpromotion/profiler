@@ -180,12 +180,13 @@ class TracyBarAdapter implements IBarPanel
             );
         }
 
+        $firstIteration = true;
         $prevX = 0;
         $prevY = $maxHeight;
         $lines = "";
         $points = "";
-        $this->profilerService->iterateMemoryTimeLine(function ($time, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY, &$lines, &$points) {
-            if ($prevX == 0) {
+        $this->profilerService->iterateMemoryTimeLine(function ($time, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$firstIteration, &$prevX, &$prevY, &$lines, &$points) {
+            if ($firstIteration) {
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $memoryChart .= sprintf(
                     "<text x='%d' y='%d' font-size='%d'>%d kB</text>",
@@ -194,6 +195,7 @@ class TracyBarAdapter implements IBarPanel
                     10,
                     floor($metaData[ProfilerService::META_MEMORY_PEAK] / 1024)
                 );
+                $firstIteration = false;
             }
             /** @noinspection PhpInternalEntityUsedInspection */
             $thisX = floor(max(0, $time) / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
