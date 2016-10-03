@@ -95,7 +95,11 @@ Add panel `Netpromotion\Profiler\Adapter\TracyBarAdapter` to your bar via `Bar::
 ```php
 tracy_wrap(function() {
     /* your code goes here */
-}, [new TracyBarAdapter()]);
+}, [new TracyBarAdapter([
+    "show" => [
+        "memoryUsageChart" => false // or true
+    ]
+])]);
 ```
 
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/lumen/).
