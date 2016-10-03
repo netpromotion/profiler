@@ -16,9 +16,9 @@ class TracyBarAdapter implements IBarPanel
 
     private $config;
 
-    public function __construct(array $config)
+    public function __construct(array $config = [])
     {
-        $this->config = $config;
+        $this->config = array_replace_recursive(TracyBarAdapter::getDefaultConfig(), $config);
 
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->profilerService = ProfilerService::getInstance();
