@@ -166,7 +166,10 @@ class TracyBarAdapter implements IBarPanel
                 );
             }
             /** @noinspection PhpInternalEntityUsedInspection */
-            $thisX = floor($time / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
+            $thisX = floor(max(0, $time) / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
+            if ($thisX == $prevX) {
+                return /* continue */;
+            }
             $thisY = floor($maxHeight - $height * $maxHeight / 100);
             $lines .= sprintf(
                 "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
