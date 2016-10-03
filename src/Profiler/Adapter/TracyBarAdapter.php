@@ -154,7 +154,7 @@ class TracyBarAdapter implements IBarPanel
         $prevY = $maxHeight;
         $lines = "";
         $points = "";
-        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY, &$lines, &$points) {
+        $this->profilerService->iterateMemoryTimeLine(function ($time, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY, &$lines, &$points) {
             if ($prevX == 0) {
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $memoryChart .= sprintf(
@@ -165,7 +165,8 @@ class TracyBarAdapter implements IBarPanel
                     floor($metaData[ProfilerService::META_MEMORY_PEAK] / 1024)
                 );
             }
-            $thisX = floor($prevX + $width * $maxWidth / 100);
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $thisX = floor($time / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
             $thisY = floor($maxHeight - $height * $maxHeight / 100);
             $lines .= sprintf(
                 "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",
