@@ -9,12 +9,40 @@ use Tracy\IBarPanel;
 
 class TracyBarAdapter implements IBarPanel
 {
+    const CONFIG_PRIMARY_VALUE = "primaryValue";
+    const CONFIG_PRIMARY_VALUE_ABSOLUTE = "absolute";
+    const CONFIG_PRIMARY_VALUE_EFFECTIVE = "effective";
+    const CONFIG_SHOW = "show";
+    const CONFIG_SHOW_MEMORY_USAGE_CHART = "memoryUsageChart";
+    const CONFIG_SHOW_SHORT_PROFILES = "shortProfiles";
+    const CONFIG_SHOW_TIME_LINES = "timeLines";
+
     private $profilerService;
 
-    public function __construct()
+    private $config;
+
+    public function __construct(array $config = [])
     {
+        $this->config = array_replace_recursive(TracyBarAdapter::getDefaultConfig(), $config);
+
         /** @noinspection PhpInternalEntityUsedInspection */
         $this->profilerService = ProfilerService::getInstance();
+    }
+
+    /**
+     * @internal
+     * @return array
+     */
+    public static function getDefaultConfig()
+    {
+        return [
+            self::CONFIG_PRIMARY_VALUE => self::CONFIG_PRIMARY_VALUE_EFFECTIVE,
+            self::CONFIG_SHOW => [
+                self::CONFIG_SHOW_MEMORY_USAGE_CHART => true,
+                self::CONFIG_SHOW_SHORT_PROFILES => true,
+                self::CONFIG_SHOW_TIME_LINES => true
+            ]
+        ];
     }
 
     /**
@@ -40,9 +68,19 @@ class TracyBarAdapter implements IBarPanel
     {
         $table = "<style>.tracy-addons-profiler-hidden{display:none}.tracy-addons-profiler-bar{display:inline-block;margin:0;height:0.8em;}</style>";
         $table .= "<table>";
-        $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
-        $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
+        if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_MEMORY_USAGE_CHART]) {
+            $table .= "<tr><td colspan='4' style='text-align: center'>" . $this->getMemoryChart() . "</td></tr>";
+        }
+        if ($this->config[self::CONFIG_PRIMARY_VALUE] == self::CONFIG_PRIMARY_VALUE_EFFECTIVE) {
+            $table .= "<tr><th>Start</th><th>Finish</th><th>Time (absolute)</th><th>Memory change (absolute)</th></tr>";
+        } else {
+            $table .= "<tr><th>Start</th><th>Finish</th><th>Time (effective)</th><th>Memory change (effective)</th></tr>";
+        }
         $this->profilerService->iterateProfiles(function (Profile $profile) use (&$table) {
+            /** @noinspection PhpInternalEntityUsedInspection */
+            if (!$this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_SHORT_PROFILES] && ($profile->meta[ProfilerService::TIME_LINE_ACTIVE] + $profile->meta[ProfilerService::TIME_LINE_INACTIVE]) < 1) {
+                return /* continue */;
+            }
             if ($profile->meta[Profiler::START_LABEL] == $profile->meta[Profiler::FINISH_LABEL]) {
                 $labels = sprintf(
                     "<td colspan='2'>%s</td>",
@@ -56,28 +94,42 @@ class TracyBarAdapter implements IBarPanel
                     $profile->meta[Profiler::FINISH_LABEL]
                 );
             }
-            $table .= sprintf(
-                "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
-                $labels,
-                $profile->duration * 1000,
-                $profile->absoluteDuration * 1000,
-                $profile->memoryUsageChange / 1024,
-                $profile->absoluteMemoryUsageChange / 1024
-            );
 
-            /** @noinspection PhpInternalEntityUsedInspection */
-            $table .= sprintf(
-                "<tr class='tracy-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
-                "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
-                "</td></tr>",
-                $profile->meta[ProfilerService::TIME_LINE_BEFORE],
-                $profile->meta[ProfilerService::TIME_LINE_ACTIVE],
-                $profile->meta[ProfilerService::TIME_LINE_INACTIVE],
-                $profile->meta[ProfilerService::TIME_LINE_AFTER]
-            );
+            if ($this->config[self::CONFIG_PRIMARY_VALUE] == self::CONFIG_PRIMARY_VALUE_EFFECTIVE) {
+                $table .= sprintf(
+                    "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
+                    $labels,
+                    $profile->duration * 1000,
+                    $profile->absoluteDuration * 1000,
+                    $profile->memoryUsageChange / 1024,
+                    $profile->absoluteMemoryUsageChange / 1024
+                );
+            } else {
+                $table .= sprintf(
+                    "<tr>%s<td>%d&nbsp;ms (%d&nbsp;ms)</td><td>%d&nbsp;kB (%d&nbsp;kB)</td></tr>",
+                    $labels,
+                    $profile->absoluteDuration * 1000,
+                    $profile->duration * 1000,
+                    $profile->absoluteMemoryUsageChange / 1024,
+                    $profile->memoryUsageChange / 1024
+                );
+            }
+
+            if ($this->config[self::CONFIG_SHOW][self::CONFIG_SHOW_TIME_LINES]) {
+                /** @noinspection PhpInternalEntityUsedInspection */
+                $table .= sprintf(
+                    "<tr class='tracy-addons-profiler-hidden'><td colspan='4'></td></tr><tr><td colspan='4'>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#cccccc;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%d%%;background-color:#3987d4;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#6ba9e6;'></span>" .
+                    "<span class='tracy-addons-profiler-bar' style='width:%s%%;background-color:#cccccc;'></span>" .
+                    "</td></tr>",
+                    $profile->meta[ProfilerService::TIME_LINE_BEFORE],
+                    $profile->meta[ProfilerService::TIME_LINE_ACTIVE],
+                    $profile->meta[ProfilerService::TIME_LINE_INACTIVE],
+                    $profile->meta[ProfilerService::TIME_LINE_AFTER]
+                );
+            }
         });
 
         $table .= "</table>";
@@ -128,12 +180,13 @@ class TracyBarAdapter implements IBarPanel
             );
         }
 
+        $firstIteration = true;
         $prevX = 0;
         $prevY = $maxHeight;
         $lines = "";
         $points = "";
-        $this->profilerService->iterateMemoryTimeLine(function ($width, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$prevX, &$prevY, &$lines, &$points) {
-            if ($prevX == 0) {
+        $this->profilerService->iterateMemoryTimeLine(function ($time, $height, $metaData) use ($colors, &$memoryChart, $maxWidth, $maxHeight, $margin, &$firstIteration, &$prevX, &$prevY, &$lines, &$points) {
+            if ($firstIteration) {
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $memoryChart .= sprintf(
                     "<text x='%d' y='%d' font-size='%d'>%d kB</text>",
@@ -142,8 +195,13 @@ class TracyBarAdapter implements IBarPanel
                     10,
                     floor($metaData[ProfilerService::META_MEMORY_PEAK] / 1024)
                 );
+                $firstIteration = false;
             }
-            $thisX = floor($prevX + $width * $maxWidth / 100);
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $thisX = floor(max(0, $time) / $metaData[ProfilerService::META_TIME_TOTAL] * $maxWidth);
+            if ($thisX == $prevX) {
+                return /* continue */;
+            }
             $thisY = floor($maxHeight - $height * $maxHeight / 100);
             $lines .= sprintf(
                 "<line x1='%d' y1='%d' x2='%d' y2='%d' stroke-width='1' stroke='%s' />",

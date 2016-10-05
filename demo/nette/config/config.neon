@@ -1,6 +1,10 @@
 extensions:
     profiler: Netpromotion\Profiler\Extension\ProfilerNetteExtension
 
+profiler:
+    profile:
+        createService: true
+
 application:
     scanDirs: false
     mapping:
