@@ -74,6 +74,20 @@ extensions:
 
 If you wish to profile before the container is ready, call `Profiler::enable` manually.
 
+#### Configuration
+
+```neon
+profiler:
+    profile:
+        createService: false  # or true
+    bar:
+        primaryValue: effective  # or absolute
+        show:
+            memoryUsageChart: true  # or false
+            shortProfiles: true  # or false
+            timeLines: true  # or false
+```
+
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/nette/).
 
 
@@ -84,7 +98,14 @@ Add panel `Netpromotion\Profiler\Adapter\TracyBarAdapter` to your bar via `Bar::
 ```php
 tracy_wrap(function() {
     /* your code goes here */
-}, [new TracyBarAdapter()]);
+}, [new TracyBarAdapter([
+    "primaryValue" => "effective", // or "absolute"
+    "show" => [
+        "memoryUsageChart" => true, // or false
+        "shortProfiles" => true, // or false
+        "timeLines" => true // or false
+    ]
+])]);
 ```
 
 There is a live demo available - run `make demo` and [click here](http://127.0.0.1:8080/lumen/).

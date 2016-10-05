@@ -133,25 +133,18 @@ class ProfilerService implements SingletonInterface
     public function iterateMemoryTimeLine(callable $callback)
     {
         $metaData = $this->getMetaData();
-        $total = 0;
-        $previousTime = $metaData[self::META_TIME_ZERO] * 1000;
+        $totalTime = 0;
         $height = 0;
         foreach ($metaData[self::META_TIME_LINE] as $time => $values) {
-            $width = floor(
-                ($time - $previousTime) / $metaData[self::META_TIME_TOTAL] / 10
-            );
-            if ($width <= 0) {
-                continue;
-            }
+            $time = $time / 1000 - $metaData[self::META_TIME_ZERO];
             $height = floor(
                 $values[self::META_TIME_LINE__MEMORY_USAGE] / $metaData[self::META_MEMORY_PEAK] * 100
             );
-            $total += $width;
-            $previousTime = $time;
-            call_user_func($callback, $width, $height, $metaData);
+            $totalTime += $time;
+            call_user_func($callback, $time, $height, $metaData);
         }
-        if ($total < 100) {
-            call_user_func($callback, 100 - $total, $height, $metaData);
+        if ($totalTime < $metaData[self::META_TIME_TOTAL]) {
+            call_user_func($callback, $metaData[self::META_TIME_TOTAL] - $totalTime, $height, $metaData);
         }
     }
 }

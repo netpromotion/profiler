@@ -6,7 +6,7 @@ use Netpromotion\Profiler\Profiler;
 use /** @noinspection PhpInternalEntityUsedInspection */ Netpromotion\Profiler\Service\ProfilerService;
 use PetrKnap\Php\Profiler\Profile;
 
-class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
+class ProfilerServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @runInSeparateProcess
@@ -142,8 +142,8 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
     public function dataIterateMemoryTimeLineComputesCorrectValues()
     {
         return [
-            [[[0 => 0, 10 => 10]], [0 => 0, 100 => 100]],
-            [[[0 => 1, 10 => 10], [4 => 6, 6 => 4]], [0 => 10, 40 => 60, 60 => 40, 100 => 100]],
+            [[[0 => 0, 10 => 10]], [0 => 0, 10 => 100]],
+            [[[0 => 1, 10 => 10], [4 => 6, 6 => 4]], [0 => 10, 4 => 60, 6 => 40, 10 => 100]],
         ];
     }
 }
