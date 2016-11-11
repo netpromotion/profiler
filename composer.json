@@ -22,10 +22,12 @@
   },
   "conflict-note": "We are using 'conflict' combined with 'require-dev' to '*' as soft require.",
   "conflict": {
+    "psr/log": "<1.0 || >= 2",
     "tracy/tracy": "<2.2 || >=3",
     "nette/di": "<2.2 || >=3"
   },
   "require-dev": {
+    "psr/log": "*",
     "tracy/tracy": "*",
     "nette/di": "*",
     "nette/bootstrap": "^2.3",
