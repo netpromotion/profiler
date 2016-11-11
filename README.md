@@ -1,6 +1,6 @@
-# [Profiler] with adapter for [Tracy]
+# [Profiler] with adapters for [Tracy] and [PSR Log]
 
-This repository contains lightweight, very quick and easy to use [Profiler] with adapter for [Tracy].
+This repository contains lightweight, very quick and easy to use [Profiler] with adapters for [Tracy] and [PSR Log].
 
 
 ## Usage
@@ -54,6 +54,21 @@ Profiler::finish("Profile 1");
 ```
 
 If you wish to know more about [Profiler], please visit [Profiler's README.md].
+
+### PSR Logger Adapter
+
+PSR Logger Adapter is universal adapter and you must call it manually.
+
+```php
+<?php
+
+use Netpromotion\Profiler\Adapter\PsrLoggerAdapter;
+
+/** @var Psr\Log\LoggerInterface $logger */
+$adapter = new PsrLoggerAdapter($logger);
+/* your profiled code goes here */
+$adapter->log(); // logs known profiles
+```
 
 
 ## How to install
@@ -114,6 +129,7 @@ There is a live demo available - run `make demo` and [click here](http://127.0.0
 
 [Profiler]:https://packagist.org/packages/petrknap/php-profiler
 [Tracy]:https://tracy.nette.org/
+[PSR Log]:https://github.com/php-fig/log
 [Profiler's README.md]:https://github.com/petrknap/php-profiler/blob/master/README.md
 [Nette]:https://nette.org/
 [Lumen]:https://lumen.laravel.com/
