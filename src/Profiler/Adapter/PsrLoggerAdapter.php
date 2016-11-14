@@ -39,18 +39,25 @@ class PsrLoggerAdapter
     public function log()
     {
         if (Profiler::isEnabled()) {
-            $this->service->iterateProfiles(function (Profile $profile) {
-                $this->logger->debug(sprintf(
-                    self::MESSAGE,
-                    $profile->meta[Profiler::START_LABEL],
-                    $profile->meta[Profiler::FINISH_LABEL],
-                    $profile->duration * 1000,
-                    $profile->absoluteDuration * 1000,
-                    $profile->memoryUsageChange / 1024,
-                    $profile->absoluteMemoryUsageChange / 1024,
-                    $_SERVER['REQUEST_URI']
-                ), $profile->jsonSerialize());
-            });
+            $this->service->iterateProfiles([$this, "logOneProfile"]);
         }
+    }
+
+    /**
+     * @param Profile $profile
+     * @return void
+     */
+    public function logOneProfile(Profile $profile)
+    {
+        $this->logger->debug(sprintf(
+            self::MESSAGE,
+            $profile->meta[Profiler::START_LABEL],
+            $profile->meta[Profiler::FINISH_LABEL],
+            $profile->duration * 1000,
+            $profile->absoluteDuration * 1000,
+            $profile->memoryUsageChange / 1024,
+            $profile->absoluteMemoryUsageChange / 1024,
+            $_SERVER['REQUEST_URI']
+        ), $profile->jsonSerialize());
     }
 }
