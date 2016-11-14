@@ -9,6 +9,8 @@ use Psr\Log\LoggerInterface;
 
 class PsrLoggerAdapter
 {
+    const MESSAGE = "%s -> %s: duration %d ms / %d ms absolute, memory change %d kB / %d kB absolute (%s)";
+
     /**
      * @var ProfilerService
      */
@@ -39,11 +41,14 @@ class PsrLoggerAdapter
         if (Profiler::isEnabled()) {
             $this->service->iterateProfiles(function (Profile $profile) {
                 $this->logger->debug(sprintf(
-                    "%s -> %s: %d ms, %d kB",
+                    self::MESSAGE,
                     $profile->meta[Profiler::START_LABEL],
                     $profile->meta[Profiler::FINISH_LABEL],
                     $profile->duration * 1000,
-                    $profile->memoryUsageChange / 1024
+                    $profile->absoluteDuration * 1000,
+                    $profile->memoryUsageChange / 1024,
+                    $profile->absoluteMemoryUsageChange / 1024,
+                    $_SERVER['REQUEST_URI']
                 ), $profile->jsonSerialize());
             });
         }
