@@ -66,7 +66,8 @@ class ProfilerNetteExtension extends CompilerExtension
                 self::PROFILER,
                 $__construct->getBody()
             ));
-
+        }
+        if (self::isActive() || Profiler::isEnabled()) {
             if ($this->config[self::CONFIG_PROFILE][self::CONFIG_PROFILE_CREATE_SERVICE]) {
                 foreach ($class->getMethods() as $method) {
                     if (preg_match('/^createService/', $method->getName())) {
