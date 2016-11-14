@@ -11,7 +11,7 @@ demo-build:
 	docker build -t profiler-demo .
 
 demo-run:
-	docker run --rm -p 8080:80 --name profiler-demo profiler-demo
+	docker run --rm -p 8080:80 -v $$(pwd)/demo:/var/www/html/ --name profiler-demo profiler-demo
 
 demo-clean:
 	docker stop profiler-demo || true
