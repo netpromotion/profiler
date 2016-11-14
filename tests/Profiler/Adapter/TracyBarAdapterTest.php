@@ -38,15 +38,15 @@ class TracyBarAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertContains("disabled", $adapter->getPanel());
 
         Profiler::enable();
-        $this->assertEquals(1, substr_count($adapter->getPanel(), "<tr>"));
+        $this->assertEquals(2, substr_count($adapter->getPanel(), "<tr>"));
 
         Profiler::start();
         Profiler::finish();
-        $this->assertEquals(3, substr_count($adapter->getPanel(), "<tr>"));
+        $this->assertEquals(4, substr_count($adapter->getPanel(), "<tr>"));
 
         Profiler::start();
         Profiler::finish();
-        $this->assertEquals(5, substr_count($adapter->getPanel(), "<tr>"));
+        $this->assertEquals(6, substr_count($adapter->getPanel(), "<tr>"));
     }
 
     /**
