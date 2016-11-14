@@ -35,7 +35,8 @@
     "latte/latte": "^2.3",
     "phpunit/phpunit": "^4.8",
     "netpromotion/tracy-wrapper": "^1.0",
-    "laravel/lumen-framework": "^5.0"
+    "laravel/lumen-framework": "^5.0",
+    "netpromotion/tracy-psr-logger": "^1.1"
   },
   "autoload": {
     "psr-4": {

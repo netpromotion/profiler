@@ -1,6 +1,8 @@
 <?php
 
+use Netpromotion\Profiler\Adapter\PsrLoggerAdapter;
 use Netpromotion\Profiler\Profiler;
+use Netpromotion\TracyPsrLogger\TracyPsrLogger;
 use Nette\Configurator;
 
 require_once __DIR__ . "/../require_me.php";
@@ -8,7 +10,7 @@ require_once __DIR__ . "/../require_me.php";
 if (DEBUG_MODE === true) {
     Profiler::enable(); // this is required only if you need to profile before container is created
 }
-
+$profileLogger = new PsrLoggerAdapter(new TracyPsrLogger());
 Profiler::start(/* keep default label for better preview */);
 
 Profiler::start("Configure application");
@@ -30,3 +32,4 @@ $container->getService("application")->run();
 Profiler::finish("Run");
 
 Profiler::finish(/* keep default label for better preview */);
+$profileLogger->log();
