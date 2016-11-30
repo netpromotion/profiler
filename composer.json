@@ -2,6 +2,12 @@
   "name": "netpromotion/profiler",
   "description": "Profiler with adapter for Tracy",
   "license": "MIT",
+  "keywords": [
+    "debug",
+    "profiler",
+    "webprofiler",
+    "Tracy"
+  ],
   "authors": [
     {
       "name": "Petr Knap",
